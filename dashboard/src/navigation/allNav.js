@@ -66,5 +66,68 @@ export const allNav=[
         role : 'admin',
         path: '/admin/dashboard/chat-sellers'
     }
- 
+    ,
+    {
+        id : 9,
+        title : 'Dashboard',
+        icon : <AiOutlineShoppingCart/>,
+        role : 'seller',
+        path: '/seller/dashboard/'
+    }
+    ,
+    {
+        id : 10,
+        title : 'Add Product',
+        icon : <AiOutlineShoppingCart/>,
+        role : 'seller',
+        path: '/seller/dashboard/add-product'
+    }
+    ,
+    {
+        id :11,
+        title : 'All Product',
+        icon : <AiOutlineShoppingCart/>,
+        role : 'seller',
+        path: '/seller/dashboard/all-product'
+    }
+    ,
+    {
+        id : 12,
+        title : 'Discount Product',
+        icon : <AiOutlineShoppingCart/>,
+        role : 'seller',
+        path: '/seller/dashboard/discount-product'
+    }
+    ,
+    {
+        id :13,
+        title : 'Orders',
+        icon : <AiOutlineShoppingCart/>,
+        role : 'seller',
+        path: '/seller/dashboard/orders'
+    }
+    ,
+    {
+        id :14,
+        title : 'Payments',
+        icon : <AiOutlineShoppingCart/>,
+        role : 'seller',
+        path: '/seller/dashboard/payments'
+    }
+    ,
+    {
+        id : 15,
+        title : 'Chat Customer',
+        icon : <AiOutlineShoppingCart/>,
+        role : 'seller',
+        path: '/seller/dashboard/chat-customer'
+    }
+    ,
+    {
+        id : 16,
+        title : 'Chat Support',
+        icon : <AiOutlineShoppingCart/>,
+        role : 'seller',
+        path: '/seller/dashboard/chat-support'
+    }
 ]
