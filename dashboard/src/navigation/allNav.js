@@ -4,6 +4,13 @@ import { FaUserTimes, FaUsers } from "react-icons/fa";
 import { MdPayment } from "react-icons/md";
 import { FaCodePullRequest } from "react-icons/fa6";
 import { IoIosChatbubbles } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
+import { MdViewList } from "react-icons/md";
+import { TbBasketDiscount } from "react-icons/tb";
+import { BsCartCheck } from "react-icons/bs"; 
+import { IoChatbubbles } from "react-icons/io5";
+import { BsFillChatQuoteFill } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
 
 export const allNav=[
     {
@@ -78,7 +85,7 @@ export const allNav=[
     {
         id : 10,
         title : 'Add Product',
-        icon : <AiOutlineShoppingCart/>,
+        icon : <IoMdAdd />,
         role : 'seller',
         path: '/seller/dashboard/add-product'
     }
@@ -86,7 +93,7 @@ export const allNav=[
     {
         id :11,
         title : 'All Product',
-        icon : <AiOutlineShoppingCart/>,
+        icon : <MdViewList />,
         role : 'seller',
         path: '/seller/dashboard/products'
     }
@@ -94,7 +101,7 @@ export const allNav=[
     {
         id : 12,
         title : 'Discount Product',
-        icon : <AiOutlineShoppingCart/>,
+        icon :<TbBasketDiscount />,
         role : 'seller',
         path: '/seller/dashboard/discount-product'
     }
@@ -102,7 +109,7 @@ export const allNav=[
     {
         id :13,
         title : 'Orders',
-        icon : <AiOutlineShoppingCart/>,
+        icon : <BsCartCheck />,
         role : 'seller',
         path: '/seller/dashboard/orders'
     }
@@ -110,7 +117,7 @@ export const allNav=[
     {
         id :14,
         title : 'Payments',
-        icon : <AiOutlineShoppingCart/>,
+        icon :  <MdPayment />,
         role : 'seller',
         path: '/seller/dashboard/payments'
     }
@@ -118,7 +125,7 @@ export const allNav=[
     {
         id : 15,
         title : 'Chat Customer',
-        icon : <AiOutlineShoppingCart/>,
+        icon :  <IoChatbubbles />,
         role : 'seller',
         path: '/seller/dashboard/chat-customer'
     }
@@ -126,14 +133,14 @@ export const allNav=[
     {
         id : 16,
         title : 'Chat Support',
-        icon : <AiOutlineShoppingCart/>,
+        icon : <BsFillChatQuoteFill />,
         role : 'seller',
         path: '/seller/dashboard/chat-support'
     },
     {
         id : 17,
         title : 'Profile',
-        icon : <AiOutlineShoppingCart/>,
+        icon : <CgProfile />,
         role : 'seller',
         path: '/seller/dashboard/profile'
     }

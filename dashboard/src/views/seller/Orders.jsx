@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Search from '../components/Search';
 import { Link } from 'react-router-dom';
 import Pagination from '../Pagination'; 
-import { FaEdit, FaEye, FaTrash } from 'react-icons/fa'; 
+import {  FaEye } from 'react-icons/fa'; 
 
 const Orders = () => {
 
@@ -42,7 +42,7 @@ const Orders = () => {
 
                 <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
                     <div className='flex justify-start items-center gap-4'>
-                    <Link className='p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50'> <FaEye/> </Link>
+                    <Link to={'/seller/dashboard/order/details/42'} className='p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50'> <FaEye/> </Link>
         
                     </div>
 

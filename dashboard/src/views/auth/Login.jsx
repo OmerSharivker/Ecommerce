@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { PropagateLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from "react-redux";
+import { overRideStyle } from '../../utils/utils';
+import  {seller_login,messageClear } from '../../store/Reducers/authReducer';
 
 const Login = () => {
+
+    const navigate=useNavigate();
+    const dispatch = useDispatch();
+    const {loader,errorMessage,successMessage}=useSelector(state=>state.auth)
+
     const [state,setState] =useState({
         email:"",
         password: ""
     })
-    
+
     const inputHandle=(e)=>{
         setState({
             ...state,[e.target.name] :e.target.value
@@ -16,10 +25,23 @@ const Login = () => {
     }
      const submit = (e)=>{
         e.preventDefault();
-        console.log(state);
+        dispatch(seller_login(state))
      }
     
-
+     useEffect(()=>{
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear());
+           navigate('/');
+          }
+    
+    
+        if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
+        }
+       
+        },[successMessage,errorMessage])
 
     return (
         <div className='min-w-screen min-h-screen bg-[#cdcae9] flex justify-center items-center'>
@@ -42,8 +64,13 @@ const Login = () => {
                  <input onChange={inputHandle} value={state.password} className='px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md' type='text' name='password' placeholder='Password' id='password' required />
                 </div>
 
-                <button className='bg-slate-800 w-full hover:shadow-blue-300/ hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'>Sign In</button>
-                
+                <button disabled={loader ? true : false}  className='bg-slate-800 w-full hover:shadow-blue-300/ hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'>
+                       
+            {
+               loader ? <PropagateLoader color='#fff' cssOverride={overRideStyle} /> : 'Sing In'
+            } 
+            </button>
+
                 <div className='flex items-center mb-3 gap-3 justify-center'>
                     <p>Don't have an account ? <Link className='font-bold' to='/register'>Sing Up</Link></p>
                 </div>

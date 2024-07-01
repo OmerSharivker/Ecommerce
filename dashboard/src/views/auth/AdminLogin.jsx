@@ -35,7 +35,7 @@ const AdminLogin = () => {
     margin: '0 auto',
     height: '24px',
     justifyContent: 'center',
-    alignItem: 'center'
+    alignItems: 'center'
    }
 
    useEffect(() => {
@@ -72,8 +72,8 @@ const AdminLogin = () => {
                  <label htmlFor='password'>Password</label>
                  <input onChange={inputHandle} value={state.password} className='px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md' type='text' name='password' placeholder='Password' id='password' required />
                 </div>
-
-                <button disabled={loader ? true : false}  className='bg-slate-800 w-full hover:shadow-blue-300/ hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'>
+ <button disabled={loader ? true : false}  className='bg-slate-800 w-full hover:shadow-blue-300/ hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'>
+               
             {
                loader ? <PropagateLoader color='#fff' cssOverride={overRideStyle} /> : 'Login'
             } 
