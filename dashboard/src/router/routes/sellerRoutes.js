@@ -1,8 +1,5 @@
 import { lazy } from "react";
 
-
-
-
 const SellerDashboard=lazy(()=> import('../../views/seller/SellerDashboard'));
 const AddProduct=lazy(()=> import('../../views/seller/AddProduct'));
 const Products=lazy(()=> import('../../views/seller/Products'));
@@ -14,9 +11,24 @@ const SellerChatAdmin=lazy(()=> import('../../views/seller/SellerChatAdmin'));
 const Profile=lazy(()=> import('../../views/seller/Profile'));
 const EditProduct=lazy(()=> import('../../views/seller/EditProduct'));
 const OrderDetails=lazy(()=> import('../../views/seller/OrderDetails'));
+const Pending=lazy(()=> import('../../views/Pending'));
+const Deactivate=lazy(()=> import('../../views/Deactivate'));
 
 export const sellerRoutes =[
 
+  {
+
+    path: '/seller/account-pending',
+    element: <Pending/>,
+   ability :'seller'
+  },
+  {
+
+    path: '/seller/account-deactivate',
+    element: <Deactivate/>,
+    ability :'seller'
+
+  },
    {
 
      path: '/seller/dashboard',
@@ -59,13 +71,13 @@ export const sellerRoutes =[
     path: '/seller/dashboard/orders',
     element : <Orders/>,
     role : 'seller',
-    ability : ['active','deactivate']
+    visibility : ['active','deactivate']
 },
 {
   path: '/seller/dashboard/order/details/:orderId',
   element : <OrderDetails/>,
   role : 'seller',
-  ability : ['active','deactivate']
+  visibility : ['active','deactivate']
 },
 {
   path: '/seller/dashboard/payments',
@@ -82,8 +94,8 @@ export const sellerRoutes =[
 {
   path: '/seller/dashboard/chat-support',
   element : <SellerChatAdmin/>,
-  // role : 'seller',
-  ability : ['active','deactivate','pending']
+  role : 'seller',
+  visibility : ['active','deactivate','pending']
 },
 {
   path: '/seller/dashboard/chat-customer',
