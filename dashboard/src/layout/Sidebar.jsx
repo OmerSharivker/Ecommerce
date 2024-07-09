@@ -20,7 +20,7 @@ const Sidebar = ({showSideBar,setShowSideBar}) => {
         const navs = getNav(role)
         setAllNav(navs)
     },[role])
-    console.log(allNav);
+
     return (
         <div>
            <div onClick={ ()=> setShowSideBar(false)} className={`fixed duration-200 ${!showSideBar ? 'invisible' : 'visible'} w-screen h-screen 

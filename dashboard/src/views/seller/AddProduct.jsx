@@ -1,35 +1,25 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoMdImages,IoMdCloseCircle } from "react-icons/io";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { get_category } from '../../store/Reducers/categoryReducer';
+import { add_product,messageClear } from '../../store/Reducers/productReducer';
+import { overRideStyle } from '../../utils/utils';
+import { PropagateLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
 
 const AddProduct = () => {
-    const categories= [
-    {
-      id: 1,
-      name: 'Sports'
-    },
-    {
-        id:2,
-        name: 'Phone'
-    },
-    {
-        id: 3,
-        name: 'TShirt'
-    },
-    {
-        id: 4,
-        name: 'Mobile'
-    },
-    {
-        id: 5,
-        name: 'Watch'
-    },
-    {
-        id: 6,
-        name: 'Pants'
-    },
-]
+    const dispatch =useDispatch()
+    const {categories} =useSelector(state => state.category)
+    const {loader,successMessage,errorMessage}=useSelector(state=>state.product)
+  
+    useEffect(()=>{
+        dispatch(get_category({
+            searchValue:'',
+            parPage:'',
+            page: ''
+        }))
+    },[])
 
 
  const [state,setState]=useState({
@@ -67,7 +57,7 @@ const imageHandle =(e)=>{
 
 const [cateShow,setCateShow]=useState(false);
 const [category,setCategory]=useState('');
-const[allCategory,setAllCategory]=useState(categories)
+const[allCategory,setAllCategory]=useState([])
 const [searchValue,setSearchValue]=useState('');
 
  const categorySearch =(e)=>{
@@ -81,7 +71,7 @@ const [searchValue,setSearchValue]=useState('');
    }
  }
  const changeImage = (img, index) => {
-    console.log(img);
+
     if (img) {
         let tempUrl = imageShow
         let tempImages = images
@@ -101,6 +91,56 @@ const removeImage = (i) => {
     setImages(filterImage)
     setImageShow(filterImageUrl)
 }
+const navigate =useNavigate();
+
+const  add=  (e) =>{
+  e.preventDefault() 
+  const formData=new FormData()
+  formData.append('name',state.name)
+  formData.append('description',state.description)
+  formData.append('price',state.price)
+  formData.append('stock',state.stock)
+  formData.append('discount',state.discount)
+  formData.append('brand',state.brand)
+  formData.append('shopName','EasyShop')
+  formData.append('category',category)
+
+
+  for (let i = 0; i < images.length; i++) {
+    formData.append('images',images[i])
+  }
+  dispatch(add_product(formData))
+
+}
+useEffect(()=>{
+setAllCategory(categories)
+},[categories]);
+
+ useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear()) 
+            setState({
+                name: "",
+                description: '',
+                discount: '',
+                price: "",
+                brand: "",
+                stock: ""
+            }) 
+            setImageShow([])
+            setImages([])
+            setCategory('')
+            // navigate(0)    
+      }
+    if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
+            // navigate(0)
+        }
+      
+    },[errorMessage,successMessage])
+
 
     return (
         <div className='px-2 lg:px-7 pt-5'>
@@ -111,7 +151,7 @@ const removeImage = (i) => {
                      hover:shadow-lg text-white rounded-sm px-7 py-2 my-2'>All Product</Link>  
                 </div>
 <div>
-    <form>
+    <form onSubmit={add}>
         <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
             <div className='flex flex-col w-full gap-1'>
                 <label htmlFor="name">Product Name</label>
@@ -206,7 +246,12 @@ const removeImage = (i) => {
 
 
                 <div className='flex'>
-                <button className='bg-red-500  hover:shadow-red-500/40 hover:shadow-md text-white rounded-md px-7 py-2 my-2'>Add Product</button>
+                <button disabled={loader ? true : false}  className='bg-red-500 w-[290px] hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'>
+                       
+                       {
+                          loader ? <PropagateLoader color='#fff' cssOverride={overRideStyle} /> : 'Add Product'
+                       } 
+                       </button>
 
             </div>
 
