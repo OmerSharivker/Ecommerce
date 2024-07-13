@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { get_category } from '../../store/Reducers/categoryReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { get_product,update_product, messageClear} from '../../store/Reducers/productReducer';
+import { get_product,update_product, messageClear,product_image_update} from '../../store/Reducers/productReducer';
 import { overRideStyle } from '../../utils/utils';
 import { PropagateLoader } from 'react-spinners';
 
@@ -62,8 +62,11 @@ const categorySearch = (e) => {
 
 const changeImage = (img, files) => {
     if (files.length > 0) {
-        console.log(img)   
-        console.log(files[0])         
+      dispatch(product_image_update({
+        oldImage:img,
+        newImage:files[0],
+        productId
+      }))
     }
    
 }
@@ -85,7 +88,7 @@ useEffect(() => {
     if (categories.length > 0) {
         setAllCategory(categories)
     }
-} )
+},[categories] )
 
 
      useEffect(() => {
