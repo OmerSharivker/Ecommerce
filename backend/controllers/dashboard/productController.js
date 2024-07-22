@@ -13,8 +13,7 @@ class  productController{
         const {images}=files;
         name=name.trim().toLowerCase()
         const slug=name.split(' ').join('-')
-        
-        
+   
         cloudinary.config({
             cloud_name: process.env.cloud_name,
             api_key: process.env.api_key,
@@ -23,16 +22,19 @@ class  productController{
         })
 
         try {
+  
             let allImageUrl=[]
             if (Array.isArray(images)) {
                 for (let i = 0; i < images.length; i++) {
                     const res = await cloudinary.uploader.upload(images[i].filepath, { folder: 'products' });
                     allImageUrl.push(res.url);
                 }
+        
             } else if (images) {
                 
                 const res = await cloudinary.uploader.upload(images.filepath, { folder: 'products' });
                 allImageUrl.push(res.url);
+            
             }
             await productModel.create({
                 sellerId: id,

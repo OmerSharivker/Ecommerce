@@ -4,7 +4,8 @@ import Pagination from '../Pagination';
 import { FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import Search from '../components/Search';
-import { messageClear,get_seller_request } from '../../store/Reducers/sellerReducer';
+import {get_seller_request } from '../../store/Reducers/sellerReducer';
+
 
 const SellerRequest = () => {
     const dispatch= useDispatch()
@@ -24,6 +25,8 @@ const SellerRequest = () => {
         page: currentPage
      }))
     },[parPage,searchValue,currentPage])
+
+
     return (
         <div className='px-2 lg:px-7 pt-5'>
      
