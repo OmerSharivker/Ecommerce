@@ -37,10 +37,10 @@ class authControllers{
         const {email,password} = req.body
         try {
             const seller = await sellerModel.findOne({email}).select('+password')
-            // console.log(admin)
+          
             if (seller) {
                 const match = await bcrypt.compare(password, seller.password)
-                // console.log(match)
+               
                 if (match) {
                     const token = await createToken({
                         id : seller.id,

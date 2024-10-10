@@ -9,7 +9,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 import { IoIosArrowDown } from "react-icons/io"; 
 
-const Header = () => {
+const Header = ({categories}) => {
 
 
     const {pathname} = useLocation()
@@ -17,16 +17,7 @@ const Header = () => {
     const [showSideBar,SetShowSideBar]=useState(true)
     const [categoryShow, setCategoryShow] = useState(true);
     const wishlist_count = 3
-    const categories = [
-        'Mobiles',
-        'Laptops',
-        'Speakers',
-        'Top wear',
-        'Footwear',
-        'Watches',
-        'Home Decor',
-        'Smart Watches',
-    ]
+    
 
     const [searchValue, setSearchValue] = useState('')
     const [category, setCategory] = useState('')
@@ -272,7 +263,8 @@ const Header = () => {
                     categories.map((c,i) => {
                         return (
                          <li key={i} className='flex justify-start items-center gap-2 px-[24px] py-[6px]'>
-                            <Link className='text-sm block'>{c}</Link>
+                            <img src={c.image} className='w-[30px] h-[30px] rounded-full overflow-hidden' alt="" />
+                            <Link className='text-sm block'>{c.name}</Link>
                          </li>
                         )
                     })
@@ -292,8 +284,8 @@ const Header = () => {
                         <select onChange={(e) => setCategory(e.target.value)} className='w-[150px] text-slate-600 font-semibold bg-transparent px-2 h-full outline-0 border-none' name="" id="">
                             <option value="">Select Category</option>
                             {
-                                categories.map((c, i) => <option value={c}>
-                                    {c}
+                                categories.map((c, i) => <option value={i}>
+                                    {c.name}
                                 </option> )
                             }
                         </select>
