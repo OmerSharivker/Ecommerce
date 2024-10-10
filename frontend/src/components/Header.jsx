@@ -8,8 +8,11 @@ import { MdEmail } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
 import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 import { IoIosArrowDown } from "react-icons/io"; 
+import { useSelector } from 'react-redux';
 
-const Header = ({categories}) => {
+const Header = () => {
+
+    const {categories} =useSelector(state => state.home)
 
 
     const {pathname} = useLocation()
