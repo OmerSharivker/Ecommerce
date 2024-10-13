@@ -11,6 +11,7 @@ import Details from './pages/Details';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { get_category } from '../src/store/reducers/homeReducer';
+import CategoryShop from './pages/CategoryShop';
 function App() {
 
   const dispatch =useDispatch()
@@ -26,6 +27,7 @@ function App() {
     <Route path='/shops' element={<Shops/>} />
     <Route path='/cart' element={<Cart/>} />
     <Route path='/shipping' element={<Shipping/>} />
+    <Route path='/products?' element={<CategoryShop/>} />
     <Route path='/product/details/:slug' element={<Details/>} />
     <Route path='/login' element={<Login/>} />
     <Route path='/register' element={<Register/>} />

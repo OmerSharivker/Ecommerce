@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { IoIosArrowForward } from "react-icons/io";
 import { Range } from 'react-range';
 import {AiFillStar} from 'react-icons/ai'
@@ -15,7 +15,11 @@ import Pagination from '../components/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { price_range_product,query_products } from '../store/reducers/homeReducer';
 
-const Shops = () => {
+const CategoryShop = () => {
+
+    let [searchParams,setSearchParams]= useSearchParams()
+    const category = searchParams.get('category')
+    console.log(category)
 
     const {categories,priceRange,latest_product,products,parPage,totalProduct} =useSelector(state => state.home)
     const [filter, setFilter] = useState(true)
@@ -38,21 +42,12 @@ const Shops = () => {
     },[priceRange])
 
    const [sortPrice ,setSortPrice]= useState('');
-   const [category ,setCategory]= useState('');
-   const queryCategory = (e,value) => {
-    if (e.target.checked) {
-        setCategory(value)
-    } else {
-        setCategory('')
-    }
-   }
 
-    
    useEffect(()=>{
     dispatch(
       query_products({
-        low : state.values[0],
-        high : state.values[1],
+        low : state.values[0] || '',
+        high : state.values[1] || '',
         category,
         rating,
         sortPrice,
@@ -81,13 +76,13 @@ const Shops = () => {
             <div className='absolute left-0 top-0 w-full h-full bg-[#2422228a]'>
                 <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
                     <div className='flex flex-col justify-center gap-1 items-center h-full w-full text-white'>
-                <h2 className='text-3xl font-bold'>Shop Page </h2>
+                <h2 className='text-3xl font-bold'>Category Page </h2>
                 <div className='flex justify-center items-center gap-2 text-2xl w-full'>
                         <Link to='/'>Home</Link>
                         <span className='pt-1'>
                         <IoIosArrowForward />
                         </span>
-                        <span>Shop </span>
+                        <span>Category  </span>
                 </div>
                     </div>
 
@@ -104,15 +99,8 @@ const Shops = () => {
 
             <div className='w-full flex flex-wrap'>
                 <div className={`w-3/12 md-lg:w-4/12 md:w-full pr-8 ${filter ? 'md:h-0 md:overflow-hidden md:mb-6' : 'md:h-auto md:overflow-auto md:mb-0' } `}>
-                    <h2 className='text-3xl font-bold mb-3 text-slate-600'>Category </h2>
-                    <div className='py-2'>
-                        {
-                            categories.map((c,i) => <div key={i} className='flex justify-start items-center gap-2 py-1'>
-                                <input checked={category === c.name ? true : false} onChange={(e)=>queryCategory(e,c.name)} type="checkbox" id={c.name} />
-                                <label className='text-slate-600 block cursor-pointer' htmlFor={c.name}>{c.name}</label>
-                            </div>)
-                        }
-                    </div>
+                   
+                  
 
         <div className='py-2 flex flex-col gap-5'>
             <h2 className='text-3xl font-bold mb-3 text-slate-600'>Price</h2>
@@ -241,4 +229,4 @@ const Shops = () => {
     );
 };
 
-export default Shops;
+export default CategoryShop;

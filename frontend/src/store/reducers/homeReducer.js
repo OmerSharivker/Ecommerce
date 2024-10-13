@@ -34,6 +34,7 @@ export const get_product =createAsyncThunk(
     async(_,{rejectWithValue, fulfillWithValue}) =>{
        try {
            const {data} =await api.get('/home/price-range-latest-product');
+           
            return fulfillWithValue(data);  
        } catch (error) {
            rejectWithValue(error.response) ;
@@ -41,11 +42,31 @@ export const get_product =createAsyncThunk(
     }
    )
    //end method
+
+
+
+   export const query_products =createAsyncThunk(
+    'product/query_products',
+    async(query,{rejectWithValue, fulfillWithValue}) =>{
+       try {
+           const {data} =await api.get(`/home/query-products?category=${query.category}&&rating=${query.rating}&&lowPrice=${query.low}&&highPrice=${query.high}&&sortPrice=${query.sortPrice}&&pageNumber=${query.pageNumber}`);
+
+           return fulfillWithValue(data);  
+
+       } catch (error) {
+           rejectWithValue(error.response) ;
+       }
+    }
+   )
+   //end method
+
 export const homeReducer = createSlice({
     name: 'home',
     initialState:{
         categories : [],
         products : [],
+        totalProduct: 0 ,
+        parPage: 3,
       latest_product: []
       ,topRated_product: []
       ,discount_product: [],
@@ -71,6 +92,12 @@ export const homeReducer = createSlice({
         .addCase(price_range_product.fulfilled, (state, { payload }) => {
             state.priceRange = payload.priceRange;
             state.latest_product = payload.latest_product;
+          
+        })
+        .addCase(query_products.fulfilled, (state, { payload }) => {
+            state.products = payload.products;
+            state.totalProduct = payload.totalProduct;
+            state.parPage = payload.parPage;
           
         })
     }

@@ -1,7 +1,7 @@
 const { responseReturn } = require("../../utiles/response");
 const categoryModel=require('../../models/categotyModel');
 const productModel = require("../../models/productModel");
-
+const queryProducts = require("../../utiles/queryProducts");
 class homeControllers{
 
 
@@ -80,7 +80,7 @@ get_products =async(req,res) =>{
       const getForPrice= await productModel.find({}).limit(9).sort({
         price : 1
       })
-      console.log(getForPrice);
+  
      if(getForPrice.length >0 ){
         priceRange.high=getForPrice[getForPrice.length -1].price
         priceRange.low=getForPrice[0].price
@@ -94,5 +94,24 @@ get_products =async(req,res) =>{
       
   }
   //end method
+
+  query_products=async(req,res) =>{
+    const parPage=2;
+      req.query.parPage=parPage
+       
+    try {
+      const products = await productModel.find({}).sort({
+        createdAt: -1 
+      })
+      const totalProduct = new queryProducts(products,req.query).categoryQuery().ratingQuery().priceQuery().sortByPrice().countProducts()
+      const result = new queryProducts(products,req.query).categoryQuery().ratingQuery().priceQuery().sortByPrice().skip().limit().getProducts()
+      responseReturn(res,200,{products : result , totalProduct,parPage})
+    } catch (error) {
+      console.log(error.message)
+    }
+  
+      
+  }
+  //end method
 }
-module.exports=new homeControllers();
+module.exports=new homeControllers()
