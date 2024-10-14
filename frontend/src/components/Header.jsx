@@ -5,17 +5,18 @@ import { IoMdArrowDropdown, IoMdPhonePortrait } from 'react-icons/io';
 import { FaHeart } from "react-icons/fa6";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdEmail } from 'react-icons/md';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 import { IoIosArrowDown } from "react-icons/io"; 
 import { useSelector } from 'react-redux';
 
 const Header = () => {
 
+    const navigate= useNavigate()
     const {categories} =useSelector(state => state.home)
-
-
     const {pathname} = useLocation()
+
+    
     const user=true;
     const [showSideBar,SetShowSideBar]=useState(true)
     const [categoryShow, setCategoryShow] = useState(true);
@@ -25,6 +26,10 @@ const Header = () => {
     const [searchValue, setSearchValue] = useState('')
     const [category, setCategory] = useState('')
 
+
+    const search = () =>{
+        navigate(`/products/search?category=${category}&&value=${searchValue}`)
+    }
  
     return (
         <div className='w-full bg-white'>
@@ -287,14 +292,14 @@ const Header = () => {
                         <select onChange={(e) => setCategory(e.target.value)} className='w-[150px] text-slate-600 font-semibold bg-transparent px-2 h-full outline-0 border-none' name="" id="">
                             <option value="">Select Category</option>
                             {
-                                categories.map((c, i) => <option value={i}>
+                                categories.map((c, i) => <option value={c.name}>
                                     {c.name}
                                 </option> )
                             }
                         </select>
                         </div>
                         <input className='w-full relative bg-transparent text-slate-500 outline-0 px-3 h-full' onChange={(e)=> setSearchValue(e.target.value)} type="text" name='' id='' placeholder='What do you need' />
-                        <button className='bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white'>Search</button>
+                        <button onClick={search} className='bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white'>Search</button>
                     </div> 
                 </div>
 

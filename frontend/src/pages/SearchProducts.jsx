@@ -15,11 +15,11 @@ import Pagination from '../components/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { price_range_product,query_products } from '../store/reducers/homeReducer';
 
-const CategoryShop = () => {
+const SearchProducts = () => {
 
     let [searchParams,setSearchParams]= useSearchParams()
     const category = searchParams.get('category')
-    console.log(category)
+    const searchValue = searchParams.get('value')
 
     const {categories,priceRange,latest_product,products,parPage,totalProduct} =useSelector(state => state.home)
     const [filter, setFilter] = useState(true)
@@ -51,10 +51,11 @@ const CategoryShop = () => {
         category,
         rating,
         sortPrice,
-        pageNumber
+        pageNumber,
+        searchValue
       })
     )
- },[state.values[0],state.values[1],category,rating,sortPrice,pageNumber])
+ },[state.values[0],state.values[1],category,rating,sortPrice,pageNumber,searchValue])
 
  const resetRating = () =>{
     setRating('')
@@ -229,4 +230,4 @@ const CategoryShop = () => {
     );
 };
 
-export default CategoryShop;
+export default SearchProducts;
