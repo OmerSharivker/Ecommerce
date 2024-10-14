@@ -28,7 +28,7 @@ export const customer_register = createAsyncThunk(
             return fulfillWithValue(data)
         } catch (error) {
             console.log(error.response.data.error)
-            return  rejectWithValue(error.response.data.error)
+            return  rejectWithValue(error.response.data)
         }
     }
 )
@@ -62,33 +62,32 @@ export const customer_register = createAsyncThunk(
     },
     extraReducers: (builder) => {
         builder
-        .addCase(customer_register.fulfilled, (state, { payload }) => {
-            const userInfo=decodeToken(payload.token)
-            state.loader = false;
-            state.successMessage = payload.message;
-            state.userInfo=userInfo
-        })
         .addCase(customer_register.pending, (state, { payload }) => {
             state.loader = true;
         })
         .addCase(customer_register.rejected, (state, { payload }) => {
+            state.errorMessage = payload.error;
             state.loader = false;
-            state.errorMessage=payload;
         })
-        .addCase(customer_login.fulfilled, (state, { payload }) => {
-            state.loader = false;
+        .addCase(customer_register.fulfilled, (state, { payload }) => {
+            const userInfo = decodeToken(payload.token)
             state.successMessage = payload.message;
-            const userInfo=decodeToken(payload.token)
-            state.userInfo=userInfo
+            state.loader = false;
+            state.userInfo = userInfo
         })
+
         .addCase(customer_login.pending, (state, { payload }) => {
             state.loader = true;
         })
         .addCase(customer_login.rejected, (state, { payload }) => {
-            
+            state.errorMessage = payload.error;
             state.loader = false;
-            state.errorMessage=payload;
-            
+        })
+        .addCase(customer_login.fulfilled, (state, { payload }) => {
+            const userInfo = decodeToken(payload.token)
+            state.successMessage = payload.message;
+            state.loader = false;
+            state.userInfo = userInfo
         })
     }
 })

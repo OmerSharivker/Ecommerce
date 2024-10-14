@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const { dbConnect } = require('./utiles/db');
 
 app.use(cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000','http://localhost:3001'],
     credentials : true
 }))
 
@@ -19,6 +19,8 @@ app.use('/api',require('./routes/dashboard/categoryRoutes'));
 app.use('/api',require('./routes/dashboard/productRoutes'));
 app.use('/api',require('./routes/dashboard/sellerRoutes'));
 app.use('/api',require('./routes/home/customerAuthRoutes'));
+app.use('/api/home',require('./routes/home/cartRoutes'));
+
 
 
 app.get('/',(req,res)=>res.send("my backend"));
