@@ -14,10 +14,11 @@ const Header = () => {
 
     const navigate= useNavigate()
     const {categories} =useSelector(state => state.home)
+    const {userInfo} =useSelector(state => state.auth)
     const {pathname} = useLocation()
 
 
-    const user=false;
+
     const [showSideBar,SetShowSideBar]=useState(true)
     const [categoryShow, setCategoryShow] = useState(true);
     const wishlist_count = 3
@@ -81,9 +82,9 @@ const Header = () => {
                              </ul>
                         </div>
                         {
-                            user ? <Link className='flex cursor-pointer justify-center items-start gap-2 text-sm text-black' to='/dashboard'>
+                            userInfo ? <Link className='flex cursor-pointer justify-center items-start gap-2 text-sm text-black' to='/dashboard'>
                                 <span> <FaUser/></span>
-                                <span> Omer Sharivker</span>
+                                <span> {userInfo.name}</span>
                                 </Link> 
                                 : 
                               <Link to='/login' className='flex cursor-pointer justify-center items-start gap-2 text-sm text-black' >
@@ -195,9 +196,9 @@ const Header = () => {
             </ul>
         </div>
         {
-            user ? <Link className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black' to='/dashboard'>
+            userInfo ? <Link className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black' to='/dashboard'>
                 <span> <FaUser/> </span>
-                <span>omer sharivker </span>
+                <span>{userInfo.name} </span>
                  </Link> : <Link className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black' to='/login'>
                 <span> <FaLock /> </span>
                 <span>Login </span>

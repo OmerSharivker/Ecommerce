@@ -29,7 +29,7 @@ const SellerDetails = () => {
             toast.success(successMessage)
             dispatch(messageClear()) 
       }
-    },[successMessage,dispatch])
+    },[successMessage])
 
     useEffect(() => {
         if (seller) {
