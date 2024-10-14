@@ -16,8 +16,8 @@ const Header = () => {
     const {categories} =useSelector(state => state.home)
     const {pathname} = useLocation()
 
-    
-    const user=true;
+
+    const user=false;
     const [showSideBar,SetShowSideBar]=useState(true)
     const [categoryShow, setCategoryShow] = useState(true);
     const wishlist_count = 3
@@ -86,7 +86,7 @@ const Header = () => {
                                 <span> Omer Sharivker</span>
                                 </Link> 
                                 : 
-                              <Link className='flex cursor-pointer justify-center items-start gap-2 text-sm text-black' to='/login'>
+                              <Link to='/login' className='flex cursor-pointer justify-center items-start gap-2 text-sm text-black' >
                                 <span> <FaLock/></span>
                                 <span> Login</span>
                                 </Link>
