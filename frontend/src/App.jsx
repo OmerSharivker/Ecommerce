@@ -13,6 +13,7 @@ import Register from './pages/Register';
 import { get_category } from '../src/store/reducers/homeReducer';
 import CategoryShop from './pages/CategoryShop';
 import SearchProducts from './pages/SearchProducts';
+import Payment from './pages/Payment';
 function App() {
 
   const dispatch =useDispatch()
@@ -33,6 +34,7 @@ function App() {
     <Route path='/product/details/:slug' element={<Details/>} />
     <Route path='/login' element={<Login/>} />
     <Route path='/register' element={<Register/>} />
+    <Route path='/payment' element={<Payment/>} />
   </Routes>
   
   

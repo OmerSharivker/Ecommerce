@@ -20,7 +20,7 @@ app.use('/api',require('./routes/dashboard/productRoutes'));
 app.use('/api',require('./routes/dashboard/sellerRoutes'));
 app.use('/api',require('./routes/home/customerAuthRoutes'));
 app.use('/api/home',require('./routes/home/cartRoutes'));
-
+app.use('/api/home',require('./routes/order/orderRoutes'));
 
 
 app.get('/',(req,res)=>res.send("my backend"));

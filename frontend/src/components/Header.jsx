@@ -15,7 +15,7 @@ const Header = () => {
     const navigate= useNavigate()
     const {categories} =useSelector(state => state.home)
     const {userInfo} =useSelector(state => state.auth)
-    const {card_product_count} =useSelector(state => state.cart)
+    const {cart_product_count} =useSelector(state => state.cart)
     const {pathname} = useLocation()
 
 
@@ -161,9 +161,9 @@ const Header = () => {
                         <div  onClick={redirect_card_page}  className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'>
                             <span className='text-xl text-green-500'><FaCartShopping  /></span>
                             {
-                            card_product_count !== 0 && <div className='w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] '>
+                            cart_product_count !== 0 && <div className='w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] '>
                         {
-                            card_product_count
+                            cart_product_count
                         }
                      </div> 
                 } 
