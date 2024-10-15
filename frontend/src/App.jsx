@@ -14,6 +14,13 @@ import { get_category } from '../src/store/reducers/homeReducer';
 import CategoryShop from './pages/CategoryShop';
 import SearchProducts from './pages/SearchProducts';
 import Payment from './pages/Payment';
+import DashBoard from './pages/DashBoard';
+import ProtectUser from './utils/ProtectUser';
+import Index from './components/dashboard/Index';
+import Orders from './components/dashboard/Orders';
+import ChangePassword from './components/dashboard/ChangePassword';
+import Wishlist from './components/dashboard/WishList';
+
 function App() {
 
   const dispatch =useDispatch()
@@ -35,6 +42,15 @@ function App() {
     <Route path='/login' element={<Login/>} />
     <Route path='/register' element={<Register/>} />
     <Route path='/payment' element={<Payment/>} />
+    <Route path='/dashboard' element={<ProtectUser/>} >
+    <Route path='' element={<DashBoard/>} >
+    <Route path='' element={<Index/>} />
+    <Route path='my-orders' element={<Orders/>} /> 
+    <Route path='change-password' element={<ChangePassword/>} /> 
+    <Route path='wish-list' element={<Wishlist/>} /> 
+    </Route>
+    </Route>
+
   </Routes>
   
   
