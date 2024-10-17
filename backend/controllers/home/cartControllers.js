@@ -1,5 +1,6 @@
 const cartModel = require("../../models/cartModel")
 const customerModel = require("../../models/customerModel")
+const wishlistModel = require("../../models/wishlistModel")
 const { responseReturn } = require("../../utiles/response")
 const {mongo :{ObjectId}} =require('mongoose')
 
@@ -165,6 +166,55 @@ class cartControllers {
             }
         }
      //end method
-
+     add_to_wishlist =  async(req, res) => {
+   
+        const { slug } = req.body
+        try {
+            const product = await wishlistModel.findOne({slug})
+                if (product) {
+                    responseReturn(res, 404 ,{
+                        error: 'Product Is Already In Wishlist'
+                    })
+                } else {
+                    await wishlistModel.create(req.body)
+                    responseReturn(res, 201 ,{
+                        message: 'Product Add to Wishlist Success'
+                    })
+                }
+        } catch (error) {
+            console.log(error.message)
+        }
+        }
+     //end method
+     get_wishlist =  async(req, res) => {
+   
+        const { userId } = req.params
+        try {
+          const wishlist= await wishlistModel.find({
+            userId
+          })
+          responseReturn(res, 200 ,{
+            wishlistCount: wishlist.length,
+            wishlist
+        })
+        } catch (error) {
+            console.log(error.message)
+        }
+        }
+     //end method
+     remove_wishlist = async (req, res) => {
+        const {wishlistId} = req.params
+        try {
+         const wishlist = await wishlistModel.findByIdAndDelete(wishlistId) 
+         responseReturn(res, 200,{
+             message: 'Wishlist Product Remove',
+             wishlistId
+         })
+         
+        } catch (error) {
+         console.log(error.message)
+        }
+     }
+// End Method 
 }
 module.exports=new cartControllers()

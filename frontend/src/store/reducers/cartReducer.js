@@ -63,14 +63,52 @@ export const quantity_dec = createAsyncThunk(
     async(cart_id, { rejectWithValue,fulfillWithValue }) => {
         try {
             const {data} = await api.put(`/home/product/quantity-dec/${cart_id}`) 
-            console.log(data)
+           
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data.error)
         }
     }
 )
-
+// End Method 
+export const add_to_wishlist = createAsyncThunk(
+    'cart/add_to_wishlist',
+    async(info, { rejectWithValue,fulfillWithValue }) => {
+        try {
+            const {data} = await api.post('/home/product/add-to-wishlist',info)  
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+// End Method 
+export const get_wishlist_products = createAsyncThunk(
+    'cart/get_wishlist_products',
+    async(userId, { rejectWithValue,fulfillWithValue }) => {
+        try {
+            const {data} = await api.get(`/home/product/get-wishlist-products/${userId}`)  
+          
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+// End Method 
+export const remove_wishlist = createAsyncThunk(
+    'wishlist/remove_wishlist',
+    async(wishlistId, { rejectWithValue,fulfillWithValue }) => {
+        try {
+            const {data} = await api.delete(`/home/product/remove-wishlist-product/${wishlistId}`) 
+       
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+// End Method 
 
 export const cartReducer = createSlice({
     name: 'cart',
@@ -122,6 +160,22 @@ export const cartReducer = createSlice({
         .addCase(quantity_dec.fulfilled, (state, { payload }) => { 
             state.successMessage = payload.message; 
             
+        })
+        .addCase(add_to_wishlist.fulfilled, (state, { payload }) => { 
+            state.successMessage = payload.message; 
+            state.wishlist_count = state.wishlist_count > 0 ? state.wishlist_count+1 : 1;
+        })
+        .addCase(add_to_wishlist.rejected, (state, { payload }) => {
+            state.errorMessage = payload.error; 
+        })
+        .addCase(get_wishlist_products.fulfilled, (state, { payload }) => { 
+            state.wishlist = payload.wishlist; 
+            state.wishlist_count = payload.wishlistCount 
+        })
+        .addCase(remove_wishlist.fulfilled, (state, { payload }) => { 
+            state.successMessage = payload.message; 
+            state.wishlist = state.wishlist.filter(p => p._id !== payload.wishlistId); 
+            state.wishlist_count = state.wishlist_count - 1
         })
     }
 })

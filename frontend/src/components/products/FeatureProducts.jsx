@@ -4,7 +4,7 @@ import { RiShoppingCartLine } from "react-icons/ri";
 import Rating from '../Rating';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { add_to_cart, messageClear } from '../../store/reducers/cartReducer';
+import { add_to_cart, add_to_wishlist, messageClear } from '../../store/reducers/cartReducer';
 import toast from 'react-hot-toast';
 
 
@@ -26,6 +26,21 @@ const {successMessage,errorMessage} =useSelector(state => state.cart)
         navigate('/login')
       }
    }
+
+   const add_wishlist = (pro) =>{
+    dispatch(add_to_wishlist({
+        userId:userInfo.id,
+        productId: pro._id,
+        name:pro.name,
+        price: pro.price,
+        image:pro.images[0],
+        discount: pro.discount,
+        rating: pro.rating,
+        slug: pro.slug,
+    }))
+   }
+
+
    useEffect(() => {
     if (successMessage) {
         toast.success(successMessage)
@@ -36,7 +51,7 @@ const {successMessage,errorMessage} =useSelector(state => state.cart)
     dispatch(messageClear()) 
 }
 },[successMessage,errorMessage])
-
+      
     return (
         <div className='w-[85%] flex flex-wrap mx-auto'>
             <div className='w-full'>
@@ -57,11 +72,11 @@ const {successMessage,errorMessage} =useSelector(state => state.cart)
         <img className='sm:w-full w-full h-[240px]' src={p.images[0]} alt="" />  
 
         <ul className='flex transition-all duration-700 -bottom-10 justify-center items-center gap-2 absolute w-full group-hover:bottom-3'>
-            <li className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center 
+            <li onClick={()=> add_wishlist(p)} className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center 
             items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all'>
             <FaRegHeart />
             </li>
-            <Link to='/product/details/new' className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center
+            <Link to={`/product/details/${p.slug}`}  className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center
              items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all'>
             <FaEye />
             </Link>
