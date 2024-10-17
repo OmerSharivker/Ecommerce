@@ -3,7 +3,7 @@ const customerOrder = require('../../models/customerOrder')
 const cardModel = require('../../models/cartModel')
 const moment = require("moment")
 const { responseReturn } = require('../../utiles/response') 
-
+const {mongo : {ObjectId}} =require('mongoose')
 class orderController{
 
     paymentCheck = async (id) => {
@@ -99,10 +99,67 @@ class orderController{
     }
 
     // End Method 
+    get_customer_dashboard_data = async (req,res) => {
+        const {userId} =req.params
+        try {
+          const recentOrders = await customerOrder.find({
+            customerId: new ObjectId(userId)
+          }).limit(5)
+          const pendingOrders = await customerOrder.find({
+            customerId: new ObjectId(userId),
+            delivery_status: 'pending'
+          }).countDocuments()
+          const totalOrders = await customerOrder.find({
+            customerId: new ObjectId(userId)
+          }).countDocuments()
+          const canceledOrders = await customerOrder.find({
+            customerId: new ObjectId(userId),
+            delivery_status: 'canceled'
+          }).countDocuments()
 
+          responseReturn(res,200,{recentOrders,pendingOrders,totalOrders,canceledOrders})
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+    // end method 
+    get_orders = async (req,res) => {
+        const {customerId,status} =req.params
+ 
+        try {
+            let orders=[]
+            if (status !== 'all') {
+                orders =await customerOrder.find({
+                    customerId: new ObjectId(customerId),
+                    delivery_status: status
+                })
+                
+            } else {
+                orders =await customerOrder.find({
+                    customerId: new ObjectId(customerId)
+                })
+            }
+            
+            responseReturn(res,200,{orders})
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+    // end method 
+    get_order_details = async (req,res) => {
+        const {orderId} =req.params
+        try {
+         const order = await customerOrder.findById(orderId)
+         responseReturn(res,200,{order})
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+    // end method 
+  
 
 }
 

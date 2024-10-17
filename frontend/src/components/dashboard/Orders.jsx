@@ -1,7 +1,32 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_orders } from '../../store/reducers/orderReducer';
 const Orders = () => {
+
     const [state, setState] = useState('all')
+    const dispatch =useDispatch();
+    const navigate= useNavigate();
+    const {userInfo}=useSelector(state=>state.auth)
+    const {myOrders}=useSelector(state=>state.order)
+    useEffect(()=>{
+        dispatch(get_orders({status:state,customerId:userInfo.id}))
+    },[state])
+    const redirect= ( order ) =>{
+        let items=0;
+       
+        for (let i = 0; i < order.products.length; i++) {
+          items=order.products[i].quantity+items;    
+        }
+        navigate('/payment',{
+            state: {
+                price:order.price,
+                items,
+                order:order._id
+            }
+        })
+     }
+    
     return (
         <div className='bg-white p-4 rounded-md'>
             <div className='flex justify-between items-center'>
@@ -10,7 +35,7 @@ const Orders = () => {
                     <option value="all">--ordre status--</option>
                     <option value="placed">Placed</option>
                     <option value="pending">Pending</option>
-                    <option value="cancelled">Cancelled</option>
+                    <option value="canceled">Cancelled</option>
                     <option value="warehouse">Warehouse</option>
                 </select> 
             </div>
@@ -27,27 +52,25 @@ const Orders = () => {
         </tr>
     </thead>
         <tbody>
-            <tr className='bg-white border-b'>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>#344</td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>$233</td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>pending</td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>pending</td>
+            {
+                myOrders.map((o,i) =>  <tr key={i} className='bg-white border-b'>
+                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>#{o._id}</td>
+                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>${o.price}</td>
+                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>{o.payment_status}</td>
+                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>{o.delivery_status}</td>
                 <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                    <Link><span className='bg-green-200 text-green-800 text-md font-semibold mr-2 px-3 py-[2px] rounded'>View</span></Link>
-                    <Link><span className='bg-green-200 text-green-800 text-md font-semibold mr-2 px-3 py-[2px] rounded'>Pay Now</span></Link> 
+                <Link to={`/dashboard/order/details/${o._id}`}><span className='bg-green-200 text-green-800 text-md font-semibold mr-2 px-3 py-[2px] rounded'>View</span></Link>
+                    {
+                        o.payment_status !== 'paid' && <span onClick={()=>{
+                            redirect(o)
+                        }} className='bg-green-200 text-green-800 text-md font-semibold mr-2 px-3 py-[2px] rounded cursor-pointer'>Pay Now</span>
+                    }
+         
                 </td> 
-            </tr>
-            <tr className='bg-white border-b'>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>#344</td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>$233</td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>pending</td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>pending</td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                    
-                    <Link><span className='bg-green-200 text-green-800 text-md font-semibold mr-2 px-3 py-[2px] rounded'>View</span></Link>
-                    <Link><span className='bg-green-200 text-green-800 text-md font-semibold mr-2 px-3 py-[2px] rounded'>Pay Now</span></Link> 
-                </td> 
-            </tr>
+            </tr>)
+            }
+           
+          
         </tbody>
 </table>
         </div>

@@ -7,7 +7,7 @@ export const add_to_cart = createAsyncThunk(
     async(info, { rejectWithValue,fulfillWithValue }) => {
         try {
             const {data} = await api.post('/home/product/add-to-cart',info) 
-            //console.log(data)
+     
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data.error)
@@ -17,11 +17,11 @@ export const add_to_cart = createAsyncThunk(
 // End Method 
 
 export const get_cart_product = createAsyncThunk(
-    'card/get_cart_product',
+    'cart/get_cart_product',
     async(userId, { rejectWithValue,fulfillWithValue }) => {
         try {
             const {data} = await api.get(`/home/product/get-cart-product/${userId}`) 
-            console.log(data)
+         
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data.error)
@@ -37,7 +37,7 @@ export const delete_cart_product = createAsyncThunk(
     async(cart_id, { rejectWithValue,fulfillWithValue }) => {
         try {
             const {data} = await api.delete(`/home/product/delete-cart-product/${cart_id}`) 
-            console.log(data)
+      
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data.error)
@@ -50,7 +50,7 @@ export const quantity_inc = createAsyncThunk(
     async(cart_id, { rejectWithValue,fulfillWithValue }) => {
         try {
             const {data} = await api.put(`/home/product/quantity-inc/${cart_id}`) 
-            console.log(data)
+        
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data.error)

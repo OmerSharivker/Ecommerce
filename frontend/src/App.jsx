@@ -20,6 +20,7 @@ import Index from './components/dashboard/Index';
 import Orders from './components/dashboard/Orders';
 import ChangePassword from './components/dashboard/ChangePassword';
 import Wishlist from './components/dashboard/WishList';
+import OrderDetails from './components/dashboard/OrderDetails';
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
     <Route path='my-orders' element={<Orders/>} /> 
     <Route path='change-password' element={<ChangePassword/>} /> 
     <Route path='wish-list' element={<Wishlist/>} /> 
+    <Route path='order/details/:orderId' element={<OrderDetails/>} /> 
     </Route>
     </Route>
 

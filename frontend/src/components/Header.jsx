@@ -302,7 +302,7 @@ const Header = () => {
                         <select onChange={(e) => setCategory(e.target.value)} className='w-[150px] text-slate-600 font-semibold bg-transparent px-2 h-full outline-0 border-none' name="" id="">
                             <option value="">Select Category</option>
                             {
-                                categories.map((c, i) => <option value={c.name}>
+                                categories.map((c, i) => <option value={c.name} key={i}>
                                     {c.name}
                                 </option> )
                             }
