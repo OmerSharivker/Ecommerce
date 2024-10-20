@@ -1,3 +1,5 @@
+import io from 'socket.io-client'
+
 export const overRideStyle={
     display :'flex',
     margin: '0 auto',
@@ -5,3 +7,4 @@ export const overRideStyle={
     justifyContent: 'center',
     alignItems: 'center'
    }
+export const socket=io('http://localhost:4000')

@@ -5,7 +5,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { dbConnect } = require('./utiles/db');
 const socket= require('socket.io');
-const http =require('http')
+const http =require('http');
+const { userInfo } = require('os');
 const server =http.createServer(app)
 
 
@@ -21,11 +22,22 @@ const io = socket(server, {
     }
 })
 var allCustomer = []
+var allSeller = []
 const addUser = (customerId,socketId,userInfo) => {
     const checkUser = allCustomer.some(u => u.customerId === customerId)
     if (!checkUser) {
         allCustomer.push({
             customerId,
+            socketId,
+            userInfo
+        })
+    }
+} 
+const addSeller = (sellerId,socketId,userInfo) => {
+    const checkSeller = allSeller.some(u => u.sellerId === sellerId)
+    if (!checkSeller) {
+        allSeller.push({
+            sellerId,
             socketId,
             userInfo
         })
@@ -37,7 +49,9 @@ io.on('connection', (soc) => {
     soc.on('add_user',(customerId,userInfo)=>{
       
         addUser(customerId,soc.id,userInfo)
-         
+   })
+   soc.on('add_seller',(sellerId,userInfo)=>{
+    addSeller(sellerId,soc.id,userInfo)
    })
 })
 

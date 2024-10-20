@@ -115,7 +115,6 @@ class ChatController{
 
     customer_message_add = async (req, res) => {
         const {userId,text,sellerId,name } = req.body
-        console.log(text)
         try {
             const message = await sellerCustomerMessage.create({
                 senderId: userId,
@@ -163,6 +162,18 @@ class ChatController{
         }
     }
   // End Method 
+  get_customers = async (req, res) => {
+    const { sellerId } = req.params
+    try {
+        const data = await sellerCustomerModel.findOne({ myId : sellerId })
+        responseReturn(res, 200, {
+            customers: data.myFriends
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+// End Method 
     
 }
 module.exports = new ChatController()
