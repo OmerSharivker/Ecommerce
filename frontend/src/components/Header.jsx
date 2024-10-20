@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { FaFacebookF, FaGithub, FaLink, FaList, FaLock, FaPhoneAlt, FaTwitter, FaUser } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { FaFacebookF, FaGithub, FaList, FaLock, FaPhoneAlt, FaTwitter, FaUser } from 'react-icons/fa';
 import { FaLinkedinIn } from 'react-icons/fa6';
 import { IoMdArrowDropdown, IoMdPhonePortrait } from 'react-icons/io';
 import { FaHeart } from "react-icons/fa6";
 import { FaCartShopping } from "react-icons/fa6";
 import { MdEmail } from 'react-icons/md';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 import { IoIosArrowDown } from "react-icons/io"; 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_cart_product, get_wishlist_products } from '../store/reducers/cartReducer';
 
 const Header = () => {
 
@@ -17,7 +17,7 @@ const Header = () => {
     const {userInfo} =useSelector(state => state.auth)
     const {cart_product_count,wishlist_count} =useSelector(state => state.cart)
     const {pathname} = useLocation()
-
+    const dispatch = useDispatch();
 
 
     const [showSideBar,SetShowSideBar]=useState(true)
@@ -27,7 +27,13 @@ const Header = () => {
 
     const [searchValue, setSearchValue] = useState('')
     const [category, setCategory] = useState('')
+    useEffect(() => {
+        if (userInfo) {
+            dispatch(get_cart_product(userInfo.id)); 
+            dispatch(get_wishlist_products(userInfo.id))
+        }
 
+    }, [dispatch, userInfo]);
 
     const search = () =>{
         navigate(`/products/search?category=${category}&&value=${searchValue}`)
@@ -39,6 +45,7 @@ const Header = () => {
             navigate('/login')
         }
     }
+
  
     return (
         <div className='w-full bg-white'>

@@ -21,7 +21,6 @@ export const get_cart_product = createAsyncThunk(
     async(userId, { rejectWithValue,fulfillWithValue }) => {
         try {
             const {data} = await api.get(`/home/product/get-cart-product/${userId}`) 
-         
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data.error)
@@ -36,9 +35,10 @@ export const delete_cart_product = createAsyncThunk(
     'cart/delete_cart_product',
     async(cart_id, { rejectWithValue,fulfillWithValue }) => {
         try {
+
             const {data} = await api.delete(`/home/product/delete-cart-product/${cart_id}`) 
-      
             return fulfillWithValue(data)
+
         } catch (error) {
             return rejectWithValue(error.response.data.error)
         }
