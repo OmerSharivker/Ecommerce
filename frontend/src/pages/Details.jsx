@@ -87,6 +87,34 @@ const Details = () => {
         } 
         
     },[successMessage,errorMessage])
+    
+    const buyNow = () => {
+
+     let price= 0;
+     if (product.discount !== 0) {
+         price =product.price -Math.floor((product.price*product.discount)/100)
+     } else {
+        price =product.price
+     }    
+     const obj =[{
+        sellerId : product.sellerId,
+        shopName : product.shopName,
+        price :(price-Math.floor((price*5)/100)) *quantity ,
+        products: [{
+            quantity,
+            productInfo:product
+        }]
+     }]
+     navigate('/shipping',{
+        state: {
+            products: obj,
+            price: price *quantity,
+            shipping_fee : 50,
+            items: 1
+        }
+    })
+
+    }
 
     const add_cart = () => {
         if (userInfo) {
@@ -205,9 +233,9 @@ const Details = () => {
       </div>
 
         <div className='text-slate-600'>
-       <p>
-       <p>{product.description} </p>
-       </p>
+       <p>{product.description}  </p>
+       <p className='text-slate-600 py-1 font-bold'>Shop Name : {product.shopName}</p>
+
         </div>
         <div className='flex gap-3 pb-10 border-b'>
         {
@@ -264,11 +292,11 @@ const Details = () => {
             </div>
             <div className='flex gap-3 '>
             {
-                stock ? <button className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#30b2cc] text-white' >
+                product.stock ? <button onClick={buyNow} className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#30b2cc] text-white' >
                     Buy Now
                 </button> : ''
             }
-             <Link to='#'  className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-red-500 text-white'>
+             <Link to={`/dashboard/chat/${product.sellerId}`}  className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-red-500 text-white'>
              Send Message
              </Link>
         </div>
@@ -289,7 +317,7 @@ const Details = () => {
                     </div>
     <div>
         {
-            state === 'reviews' ? <Reviews/> : <p className='py-5 text-slate-600'>
+            state === 'reviews' ? <Reviews product={product}/> : <p className='py-5 text-slate-600'>
         {product.description}</p>
         }
     </div> 
@@ -299,7 +327,7 @@ const Details = () => {
 <div className='w-[28%] md-lg:w-full'>
 <div className='pl-4 md-lg:pl-0'>
     <div className='px-3 py-2 text-slate-600 bg-slate-200'>
-        <h2 className='font-bold'>From Easy Shop</h2>
+        <h2 className='font-bold'>From {product.shopName}</h2>
     </div>
     <div className='flex flex-col gap-5 mt-3 border p-3'>
         {

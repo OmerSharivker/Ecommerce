@@ -13,4 +13,5 @@ router.post('/product/add-to-wishlist', cartControllers.add_to_wishlist);
 router.get('/product/get-wishlist-products/:userId', cartControllers.get_wishlist);
 router.delete('/product/remove-wishlist-product/:wishlistId',cartControllers.remove_wishlist)
 
+
 module.exports = router;
