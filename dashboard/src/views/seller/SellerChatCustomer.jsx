@@ -1,21 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaList } from 'react-icons/fa6';
 import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
-import { get_customers } from '../../store/Reducers/chatReducer'
-import { Link } from 'react-router-dom';
-
+import { get_customer_message, get_customers,messageClear,send_message,updateMessage} from '../../store/Reducers/chatReducer';
+import { Link, useParams } from 'react-router-dom';
+import { socket } from '../../utils/utils';
+import toast from 'react-hot-toast';
 const SellerChatCustomer = () => {
-
+    const scrollRef=  useRef()
     const [show, setShow] = useState(false) 
     const sellerId = 65
     const {userInfo } = useSelector(state => state.auth)
     const dispatch = useDispatch()
-    const {customers } = useSelector(state => state.chat)
+    const {customers,messages,currentCustomer,successMessage } = useSelector(state => state.chat)
+    const { customerId } =  useParams()
+    const [text,setText] = useState('')
+    const [receiverMessage,setReceiverMessage] = useState('')
+
+
+    useEffect(() => {
+        socket.emit('add_seller',userInfo._id, userInfo)
+    },[])
+
     useEffect(() => {
         dispatch(get_customers(userInfo._id))
     },[])
+    useEffect(() => {
+        if (customerId) {
+            dispatch(get_customer_message(customerId))
+        }
+    },[customerId])
+    
+    const send = (e) => {
+        e.preventDefault() 
+            dispatch(send_message({
+                senderId: userInfo._id, 
+                receiverId: customerId,
+                text,
+                name: userInfo?.shopInfo?.shopName 
+            }))
+            setText('') 
+    }
+    useEffect(() => {
+        if (successMessage) {
+            socket.emit('send_seller_message',messages[messages.length - 1])
+            dispatch(messageClear())
+        }
+    },[successMessage])
 
+    useEffect(() => {
+        socket.on('customer_message', msg => {
+            setReceiverMessage(msg)
+        })
+         
+    },[])
+
+    useEffect(() => {
+        if (receiverMessage) {
+            if (customerId === receiverMessage.senderId && userInfo._id === receiverMessage.receiverId) {
+                dispatch(updateMessage(receiverMessage))
+            } else {
+                toast.success(receiverMessage.senderName + " " + "Send A message")
+                dispatch(messageClear())
+            }
+        }
+
+    },[receiverMessage])
+
+    useEffect(()=>{
+        scrollRef.current?.scrollIntoView({behavior : 'smooth'})
+    },[messages])
+  
     return (
     <div className='px-2 lg:px-7 py-5'>
         <div className='w-full bg-[#6a5fdf] px-4 py-4 rounded-md h-[calc(100vh-140px)]'>
@@ -36,7 +91,7 @@ const SellerChatCustomer = () => {
             <div className='flex justify-center items-start flex-col w-full'>
                 <div className='flex justify-between items-center w-full'>
                     <h2 className='text-base font-semibold'>{c.name}</h2>
-    
+                    
                 </div> 
             </div> 
       
@@ -56,7 +111,7 @@ const SellerChatCustomer = () => {
          src="http://localhost:3000/images/demo.jpg" alt="" />
          <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
         </div>
-         <h2 className='text-base text-white font-semibold'>Omer</h2>
+         <h2 className='text-base text-white font-semibold'>{currentCustomer.name}</h2>
                 </div>
             }
 
@@ -71,50 +126,48 @@ const SellerChatCustomer = () => {
         <div className='py-4'>
             <div className='bg-[#475569] h-[calc(100vh-290px)] rounded-md p-3 overflow-y-auto'>
 
-            <div className='w-full flex justify-start items-center'>
-                    <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
-                        <div>
-                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3000/images/demo.jpg" alt="" />
-                        </div>
-                        <div className='flex justify-center items-start flex-col w-full bg-blue-500 shadow-lg shadow-blue-500/50 text-white py-1 px-2 rounded-sm'>
-                        <span>How Are you ? </span>
+        
+        {
+            customerId ? messages.map((m,i)=>{
+                if (m.senderId === customerId) {
+                    return( <div key={i} ref={scrollRef} className='w-full flex justify-start items-center'>
+                        <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
+                            <div>
+                                <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3000/images/demo.jpg" alt="" />
+                            </div>
+                            <div className='flex justify-center items-start flex-col w-full bg-blue-500 shadow-lg shadow-blue-500/50 text-white py-1 px-2 rounded-sm'>
+                            <span>{m.message} </span>
+                            </div> 
                         </div> 
-                    </div> 
-                </div>
-
-
-                <div className='w-full flex justify-end items-center'>
-                    <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
-
-                        <div className='flex justify-center items-start flex-col w-full bg-red-500 shadow-lg shadow-red-500/50 text-white py-1 px-2 rounded-sm'>
-                        <span>How Are you ? </span>
+                    </div>)
+                } else {
+                    return(      <div  key={i} ref={scrollRef}  className='w-full flex justify-end items-center'>
+                        <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
+    
+                            <div className='flex justify-center items-start flex-col w-full bg-red-500 shadow-lg shadow-red-500/50 text-white py-1 px-2 rounded-sm'>
+                            <span>{m.message} </span>
+                            </div> 
+                            <div>
+                                <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3000/images/admin.jpg" alt="" />
+                            </div>
+    
                         </div> 
-                        <div>
-                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3000/images/admin.jpg" alt="" />
-                        </div>
+                    </div>)
+                }
+            }) : <div className='w-full h-full flex  justify-center items-center text-white gap-2 flex-col'>
+                <span>Select Customer</span>
+            </div>
+        }
 
-                    </div> 
-                </div>
 
-
-                <div className='w-full flex justify-start items-center'>
-                    <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
-                        <div>
-                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3000/images/demo.jpg" alt="" />
-                        </div>
-                        <div className='flex justify-center items-start flex-col w-full bg-blue-500 shadow-lg shadow-blue-500/50 text-white py-1 px-2 rounded-sm'>
-                        <span>I Need some help </span>
-                        </div> 
-                    </div> 
-                </div>
+           
 
 
 
             </div> 
         </div>
-
-        <form className='flex gap-3'>
-            <input className='w-full flex justify-between px-2 border border-slate-700 items-center py-[5px]
+ <form onSubmit={send} className='flex gap-3'>
+            <input value={text} onChange={(e) => setText(e.target.value)} className='w-full flex justify-between px-2 border border-slate-700 items-center py-[5px]
              focus:border-blue-500 rounded-md outline-none bg-transparent text-[#d0d2d6]' type="text" placeholder='Input Your Message' />
             <button className='shadow-lg bg-[#06b6d4] hover:shadow-cyan-500/50 text-semibold w-[75px] 
             h-[35px] rounded-md text-white flex justify-center items-center'>Send</button>

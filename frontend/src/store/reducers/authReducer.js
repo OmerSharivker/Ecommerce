@@ -57,8 +57,11 @@ export const customer_register = createAsyncThunk(
         messageClear : (state,_) => {
             state.errorMessage = ""
             state.successMessage = ""
+        },
+   
+        user_reset : (state,_) => {
+            state.userInfo = ""
         }
-
     },
     extraReducers: (builder) => {
         builder
@@ -66,7 +69,7 @@ export const customer_register = createAsyncThunk(
             state.loader = true;
         })
         .addCase(customer_register.rejected, (state, { payload }) => {
-            state.errorMessage = payload.error;
+            state.errorMessage = payload;
             state.loader = false;
         })
         .addCase(customer_register.fulfilled, (state, { payload }) => {
@@ -92,4 +95,5 @@ export const customer_register = createAsyncThunk(
     }
 })
 export const {messageClear} = authReducer.actions
+export const {user_reset} = authReducer.actions
 export default authReducer.reducer

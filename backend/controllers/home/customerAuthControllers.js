@@ -75,7 +75,22 @@ class customerAuthControllers {
     }
    //end method
 
+   customer_logout =async(req,res)=>{
 
+ 
+      try {
+          
+          res.cookie('accessToken',"",{
+            expires : new Date(Date.now() )
+          })
+  
+          responseReturn(res,201,{message: 'User Logout Success'})  
+      } catch (error) {
+          console.log(error.message);
+      }
+      }
+     //end method
+  
 
 
 }
