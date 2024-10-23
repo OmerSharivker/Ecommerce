@@ -116,6 +116,8 @@ class authControllers{
     //end method
 
 
+
+
     profile_image_upload = async(req, res) => {
 
         const form = formidable({ multiples: true })

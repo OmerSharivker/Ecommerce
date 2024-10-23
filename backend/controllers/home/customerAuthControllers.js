@@ -80,7 +80,7 @@ class customerAuthControllers {
  
       try {
           
-          res.cookie('accessToken',"",{
+          res.cookie('customerToken',"",{
             expires : new Date(Date.now() )
           })
   

@@ -70,6 +70,12 @@ export const adminRoutes =[
     }
     ,
     {
+     path: 'admin/dashboard/chat-sellers/:sellerId',
+     element : <ChatSeller/> ,
+     role : 'admin'
+}
+,
+    {
               path: 'admin/dashboard/order/details/:orderId',
               element : <OrderDetails/> ,
               role : 'admin'
