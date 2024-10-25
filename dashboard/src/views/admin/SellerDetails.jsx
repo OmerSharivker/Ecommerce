@@ -45,7 +45,7 @@ const SellerDetails = () => {
             <div className='w-3/12 flex justify-center items-center py-3'>
                 <div>
                        {
-                        seller?.image ? <img className='w-full h-[230px]' src="http://localhost:3000/images/demo.jpg" alt="" /> : <span>Image Not Uploaded</span>
+                        seller?.image ? <img className='w-full h-[230px]' src={seller.image} alt="" /> : <span>Image Not Uploaded</span>
                        }
                 </div> 
             </div>

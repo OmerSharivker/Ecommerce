@@ -99,7 +99,6 @@ io.on('connection', (soc) => {
 })  
 
 soc.on('send_message_seller_to_admin',(msg) => {
-    console.log(admin)
     if (admin.socketId) {
         soc.to(admin.socketId).emit('received_seller_message', msg)
     }

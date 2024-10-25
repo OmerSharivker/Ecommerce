@@ -5,10 +5,10 @@ import {jwtDecode} from "jwt-decode"
 export const admin_login= createAsyncThunk(
     'auth/admin_login',
     async (info,{rejectWithValue, fulfillWithValue})=>{
-        console.log(info)
+     
         try{
             const {data} = await api.post('/admin-login',info,{withCredentials: true});
-             console.log(data)
+      
             localStorage.setItem('accessToken',data.token) 
             return fulfillWithValue(data)
         }catch(error){
@@ -21,10 +21,10 @@ export const admin_login= createAsyncThunk(
 export const seller_login= createAsyncThunk(
     'auth/seller_login',
     async (info,{rejectWithValue, fulfillWithValue})=>{
-        console.log(info)
+  
         try{
             const {data} = await api.post('/seller-login',info,{withCredentials: true});
-            console.log(data)
+           
             localStorage.setItem('accessToken',data.token) 
             return fulfillWithValue(data)
         }catch(error){
@@ -51,7 +51,7 @@ export const get_user_info = createAsyncThunk(
 export const seller_register= createAsyncThunk(
     'auth/seller-register',
     async (info,{rejectWithValue, fulfillWithValue})=>{
-        console.log(info)
+
         try{
             const {data} = await api.post('/seller-register',info,{withCredentials: true});
             localStorage.setItem('accessToken',data.token);
@@ -105,7 +105,7 @@ export const profile_info_add = createAsyncThunk(
 
         try {
             const {data} = await api.post('/profile-info-add',info,{withCredentials: true})
-            console.log(data)            
+               
             return fulfillWithValue(data)
         } catch (error) {
             // console.log(error.response.data)
@@ -114,7 +114,30 @@ export const profile_info_add = createAsyncThunk(
     }
 )
 
+//end method
 
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async({navigate,role},{rejectWithValue, fulfillWithValue}) => {
+         
+        try {
+            const {data} = await api.get('/logout', {withCredentials: true}) 
+            console.log(role)
+            localStorage.removeItem('accessToken') 
+            if (role === 'admin') {
+                navigate('/admin/login')
+            } else {
+                console.log(data)
+                navigate('/login')
+            }
+            return fulfillWithValue(data)
+        } catch (error) {
+            // console.log(error.response.data)
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+    // end Method 
 export const authReducer = createSlice({
     name: 'auth',
     initialState:{
@@ -129,7 +152,15 @@ export const authReducer = createSlice({
 
       messageClear : (state,_) => {
             state.errorMessage = ""
+        },
+        clearAuthState: (state) => {
+            state.userInfo = '';
+            state.role = ''; // or null, depending on your setup
+            state.token = null;
+            state.successMessage = '';
+            state.errorMessage = '';
         }
+  
     },
     extraReducers: (builder) => {
         builder
@@ -202,5 +233,5 @@ export const authReducer = createSlice({
     }
 
 })
-export const{messageClear}=authReducer.actions;
+export const{messageClear,clearAuthState}=authReducer.actions;
 export default authReducer.reducer;
