@@ -4,7 +4,7 @@ import { getNav } from '../navigation/index';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { useDispatch, useSelector } from "react-redux";
 import { clearAuthState, logout } from '../store/Reducers/authReducer';
-
+import logo from '../assets/logo.png'
 
 
 const Sidebar = ({showSideBar,setShowSideBar}) => {
@@ -34,7 +34,7 @@ const Sidebar = ({showSideBar,setShowSideBar}) => {
     }`}>
     <div className='h-[70px] flex justify-center items-center'>
      <Link to='/' className='w-[180px] h-[50px]'>
-        <img  className='w-full h-full'src='http://localhost:3000/images/logo.png' alt="" />
+        <img  className='w-full h-full'src={logo} alt="" />
      </Link>
     </div>
     <div className='px-[16px] '>

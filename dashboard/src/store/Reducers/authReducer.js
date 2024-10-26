@@ -155,7 +155,7 @@ export const authReducer = createSlice({
         },
         clearAuthState: (state) => {
             state.userInfo = '';
-            state.role = ''; // or null, depending on your setup
+            state.role = '';
             state.token = null;
             state.successMessage = '';
             state.errorMessage = '';
