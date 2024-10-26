@@ -22,6 +22,7 @@ import ChangePassword from './components/dashboard/ChangePassword';
 import Wishlist from './components/dashboard/WishList';
 import OrderDetails from './components/dashboard/OrderDetails';
 import Chat from './components/dashboard/Chat';
+import ConfirmOrder from './pages/ConfirmOrder';
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
     <Route path='/login' element={<Login/>} />
     <Route path='/register' element={<Register/>} />
     <Route path='/payment' element={<Payment/>} />
+    <Route path='/order/confirm?' element={<ConfirmOrder/>} />
     <Route path='/dashboard' element={<ProtectUser/>} >
     <Route path='' element={<DashBoard/>} >
     <Route path='' element={<Index/>} />

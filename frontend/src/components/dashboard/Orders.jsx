@@ -9,6 +9,7 @@ const Orders = () => {
     const navigate= useNavigate();
     const {userInfo}=useSelector(state=>state.auth)
     const {myOrders}=useSelector(state=>state.order)
+   
     useEffect(()=>{
         dispatch(get_orders({status:state,customerId:userInfo.id}))
     },[state])
@@ -18,21 +19,24 @@ const Orders = () => {
         for (let i = 0; i < order.products.length; i++) {
           items=order.products[i].quantity+items;    
         }
+       
+     
         navigate('/payment',{
             state: {
                 price:order.price,
                 items,
-                order:order._id
+                orderId:order._id
             }
         })
      }
+
     
     return (
         <div className='bg-white p-4 rounded-md'>
             <div className='flex justify-between items-center'>
                 <h2 className='text-xl font-semibold text-slate-600'>My Orders </h2>
                 <select className='outline-none px-3 py-1 border rounded-md text-slate-600' value={state} onChange={(e) => setState(e.target.value)} >
-                    <option value="all">--ordre status--</option>
+                    <option value="all">--order status--</option>
                     <option value="placed">Placed</option>
                     <option value="pending">Pending</option>
                     <option value="canceled">Cancelled</option>
@@ -63,6 +67,7 @@ const Orders = () => {
                     {
                         o.payment_status !== 'paid' && <span onClick={()=>{
                             redirect(o)
+                           
                         }} className='bg-green-200 text-green-800 text-md font-semibold mr-2 px-3 py-[2px] rounded cursor-pointer'>Pay Now</span>
                     }
          
