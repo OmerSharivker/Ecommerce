@@ -2,7 +2,7 @@ const formidable = require("formidable");
 const { responseReturn } = require("../../utiles/response");
 const cloudinary =require('cloudinary').v2
 const productModel=require('../../models/productModel')
-
+const {mongo : {ObjectId}} =require('mongoose')
 class  productController{
     add_product=async(req,res)=>{
         const {id}=req;
@@ -162,6 +162,72 @@ product_image_update =async (req,res)=>{
     }
    })
 }
+//end method 
+delete_product = async (req,res) =>{
+     const {productId}=req.params
+     const {id}=req
+     console.log(id,productId)
+    try {
+        await productModel.findByIdAndDelete(
+          productId
+        )
+        const products= await productModel.find({sellerId : id})
+        console.log(products)
+        responseReturn(res,200,{products,message: "Product Deleted"})
+    } catch (error) {
+       responseReturn(res, 500,{error : error.message})
+     
+    }
+}
+//end method
+
+get_discount_product = async (req,res) =>{
+    const {id}=req
+  
+   try {
+          const discountProducts= await productModel.find({
+            $and:[
+                {
+                    sellerId:id
+                },
+                {
+                    discount: {
+                        $gt:0
+                    }
+                }
+            ]
+          })
+          responseReturn(res,200,{discountProducts})
+   } catch (error) {
+      responseReturn(res, 500,{error : error.message})
+    
+   }
+}
+//end method
+zero_discount = async (req,res) =>{
+    const {productId}=req.body
+    const {id}=req
+   try {
+      await productModel.findByIdAndUpdate(productId,{discount: 0})
+      const discountProducts= await productModel.find({
+        $and:[
+            {
+                sellerId:id
+            },
+            {
+                discount: {
+                    $gt:0
+                }
+            }
+        ]
+      })
+      responseReturn(res,200,{discountProducts,message: "The product discount has been set to zero"})
+   } catch (error) {
+      responseReturn(res, 500,{error : error.message})
+    
+   }
+}
+//end method
 
 }
 module.exports=new productController();

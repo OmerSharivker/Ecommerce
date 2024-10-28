@@ -1,10 +1,14 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
 import { Link } from 'react-router-dom';
 import 'react-multi-carousel/lib/styles.css'
+import { useDispatch, useSelector } from 'react-redux';
+import { get_banners } from '../store/reducers/homeReducer';
 
 const Banner = () => {
+    const dispatch = useDispatch()
+    const {banners} = useSelector(state => state.home)
 
     const responsive = {
         superLargeDesktop: {
@@ -26,7 +30,9 @@ const Banner = () => {
     }
 
 
-
+    useEffect(() => {
+        dispatch(get_banners())
+    },[])
     return (
         <div className='w-full md-lg:mt-6'>
             <div className='w-[85%] lg:w-[90%] mx-auto'>
@@ -41,8 +47,9 @@ const Banner = () => {
                     responsive={responsive}
                 >
                 {
-                    [1,2,3,4,5,6].map((img, i) => <Link key={i} to='#'>
-                        <img src={`http://localhost:3000/images/banner/${img}.jpg`} alt="" />
+                       banners.length > 0 && banners.map((b, i) => <Link key={i} to={`product/details/${b.link}`}>
+                        <img className="w-full h-96 
+                         object-cover" src={ b.banner} alt="" />
                     </Link> )
                 }
                 </Carousel>        

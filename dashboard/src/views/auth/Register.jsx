@@ -70,7 +70,7 @@ const inputHandle=(e)=>{
 
                 <div className='flex flex-col w-full gap-1 mb-3'>
                  <label htmlFor='password'>Password</label>
-                 <input onChange={inputHandle} value={state.password} className='px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md' type='text' name='password' placeholder='Password' id='password' required />
+                 <input type="password" onChange={inputHandle} value={state.password} className='px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md'  name='password' placeholder='Password' id='password' required />
                 </div>
 
 

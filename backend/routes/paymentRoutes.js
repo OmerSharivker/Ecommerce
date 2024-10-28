@@ -9,4 +9,6 @@ router.get('/payment/create-stripe-connect-account',authMiddleware, paymentContr
 router.put('/payment/active-stripe-connect-account/:activeCode',authMiddleware,paymentController.active_stripe_connect_account);
 router.get('/payment/get-seller-payment-details/:sellerId',authMiddleware, paymentController.get_seller_payment_details);
 router.post('/payment/withdrawal-request',authMiddleware,paymentController.withdrawal_request)
+router.get('/payment/request',authMiddleware,paymentController.get_payment_request)
+router.post('/payment/request-confirm',authMiddleware,paymentController.confirm_payment_request)
 module.exports = router;

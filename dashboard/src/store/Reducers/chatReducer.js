@@ -89,7 +89,7 @@ export const get_seller_message= createAsyncThunk(
         
         try {
             const {data} = await api.get(`/chat/get-seller-messages`,{withCredentials: true}) 
-            console.log(data)
+          
             return fulfillWithValue(data)
         } catch (error) { 
             return rejectWithValue(error.response.data)

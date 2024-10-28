@@ -90,6 +90,44 @@ export const product_image_update= createAsyncThunk(
     }
 }
 )
+export const delete_product= createAsyncThunk(
+    'product/delete_product',
+    async (productId,{rejectWithValue, fulfillWithValue})=>{
+    
+        try{
+   
+            const {data} = await api.delete(`/delete-product/${productId}`, {withCredentials: true});
+          
+            return fulfillWithValue(data)
+        }catch(error){
+            return rejectWithValue(error.response.data);       
+    }
+}
+)
+export const get_discount_products= createAsyncThunk(
+    'product/get_discount_products',
+    async (_,{rejectWithValue, fulfillWithValue})=>{
+    
+        try{
+            const {data} = await api.get(`/discount-product`, {withCredentials: true});
+            return fulfillWithValue(data)
+        }catch(error){
+            return rejectWithValue(error.response.data);       
+    }
+}
+)
+export const zero_discount= createAsyncThunk(
+    'product/zero_discount',
+    async (productId,{rejectWithValue, fulfillWithValue})=>{
+    
+        try{
+            const {data} = await api.put(`/zero-discount`,{productId} ,{withCredentials: true});
+            return fulfillWithValue(data)
+        }catch(error){
+            return rejectWithValue(error.response.data);       
+    }
+}
+)
 
 export const productReducer = createSlice({
     name: 'product',
@@ -98,13 +136,15 @@ export const productReducer = createSlice({
         errorMessage : '',
         loader: false,
         products : [],
+        discountProducts: [],
         product: '',
         totalProduct: 0
     },
     reducers : {
 
-      messageClear : (state,_) => {
+        messageClear : (state,_) => {
             state.errorMessage = ""
+            state.successMessage = ""
         }
     },
     extraReducers: (builder) => {
@@ -147,7 +187,23 @@ export const productReducer = createSlice({
             state.product=payload.product
             state.successMessage =payload.message;
         })
-
+        .addCase(delete_product.fulfilled, (state, { payload }) => {
+            state.products=payload.products
+            state.successMessage =payload.message;
+        })
+        .addCase(delete_product.rejected, (state, { payload }) => {
+            state.errorMessage = payload.error
+        }) 
+        .addCase(get_discount_products.fulfilled, (state, { payload }) => {
+            state.discountProducts=payload.discountProducts
+        })
+        .addCase(zero_discount.rejected, (state, { payload }) => {
+            state.errorMessage = payload.error
+        }) 
+        .addCase(zero_discount.fulfilled, (state, { payload }) => {
+            state.discountProducts=payload.discountProducts
+            state.successMessage =payload.message;
+        })
     }
 
 })

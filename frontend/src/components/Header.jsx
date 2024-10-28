@@ -155,7 +155,7 @@ const Header = () => {
 
                     <div className='flex md-lg:hidden justify-center items-center gap-5'>
                     <div className='flex justify-center gap-5'>
-                        <div className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'>
+                    <Link to={userInfo ? '/dashboard/wish-list' : '/login'}>      <div  className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'>
                             <span className='text-xl text-green-500'><FaHeart /></span>
    
                 {
@@ -164,7 +164,7 @@ const Header = () => {
                 }
 
                         </div>
-
+                        </Link>
                         <div  onClick={redirect_card_page}  className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'>
                             <span className='text-xl text-green-500'><FaCartShopping  /></span>
                             {

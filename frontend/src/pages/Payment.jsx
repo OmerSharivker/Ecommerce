@@ -8,7 +8,7 @@ const Payment = () => {
 
     const { state: {price,items,orderId}} = useLocation()
     const [paymentMethod, setPaymentMethod] = useState('stripe')
-    console.log(orderId)
+
 
     return (
         <div>
