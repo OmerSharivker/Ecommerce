@@ -216,9 +216,9 @@ const Details = () => {
       </div>
       <div className='flex justify-start items-center gap-4'>
       <div className='flex text-xl'>
-         <Rating ratings={4.5}/>
+         <Rating ratings={product.rating}/>
       </div>
-      <span className='text-green-500'>(24 reviews)</span>
+      <span className='text-green-500'>()</span>
       </div>
       <div className='text-2xl text-red-500 font bold flex gap-3'>
         {

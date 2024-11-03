@@ -3,7 +3,6 @@ import { AiOutlineMessage, AiOutlinePlus } from 'react-icons/ai'
 import { GrEmoji } from 'react-icons/gr'
 import { IoEllipseSharp, IoSend } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux';
-
 import { Link, useParams } from 'react-router-dom'
 import io from 'socket.io-client'
 import { add_friend, messageClear, send_message, updateMessage } from '../../store/reducers/chatReducer';
@@ -12,18 +11,21 @@ import { FaList } from 'react-icons/fa';
 
 
 
-const socket = io('http://localhost:4000')
+const socket = io( 'https://ecommerce-ils0.onrender.com')
 
 const Chat = () => {
-    const scrollRef=useRef()
-    const{sellerId}=useParams();
-    const{userInfo}=useSelector(state=>state.auth)
-    const {fb_messages,currentFd ,my_friends,successMessage } = useSelector(state => state.chat)
-    const [text,setText]=useState('');
-    const dispatch=useDispatch();
+
+    const scrollRef = useRef()
+
+    const dispatch = useDispatch()
+    const {sellerId} = useParams()
+    const {userInfo } = useSelector(state => state.auth)
+    const {fb_messages,currentFd,my_friends,successMessage } = useSelector(state => state.chat)
+    const [text,setText] = useState('')
     const [receiverMessage,setReceiverMessage] = useState('')
     const [activeSeller,setActiveSeller] = useState([])
     const [show, setShow] = useState(false)
+    
     useEffect(() => {
         socket.emit('add_user',userInfo.id, userInfo)
     },[])
@@ -46,7 +48,7 @@ const Chat = () => {
             setText('')
         }
     }
-  
+
     useEffect(() => {
         socket.on('seller_message', msg => {
             setReceiverMessage(msg)
@@ -74,15 +76,16 @@ const Chat = () => {
         }
 
     },[receiverMessage])
-
-    useEffect(()=>{
-        scrollRef.current?.scrollIntoView({behavior : 'smooth'})
+    
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth'})
     },[fb_messages])
+
     return (
         <div className='bg-white p-3 rounded-md'>
     <div className='w-full flex'>
         
-        <div className={`w-[230px] md-lg:absolute bg-white md-lg:h-full  ${show ? '-left-0' : '-left-[350px]'}`}>
+        <div className={`w-[230px] md-lg:absolute bg-white md-lg:h-full -left-[350px] ${show ? '-left-0' : '-left-[350px]'}`}>
             <div className='flex justify-center gap-3 items-center text-slate-600 text-xl h-[50px]'>
                 <span><AiOutlineMessage /></span>
                 <span>Message</span>
@@ -121,7 +124,7 @@ const Chat = () => {
                 
             </div> 
 
-                <div onClick={()=> setShow(false)} className='w-[35px] h-[35px] hidden md-lg:flex cursor-pointer rounded-sm justify-center items-center bg-sky-500 text-white'>
+                <div onClick={()=> setShow(!show)} className='w-[35px] h-[35px] hidden md-lg:flex cursor-pointer rounded-sm justify-center items-center bg-sky-500 text-white'>
                     <FaList/>
                 </div>      
                

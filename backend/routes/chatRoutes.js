@@ -11,7 +11,7 @@ router.get('/chat/seller/get-customer-message/:customerId',authMiddleware,ChatCo
 router.post('/chat/seller/send-message-to-customer',authMiddleware,ChatController.seller_message_add)
 router.get('/chat/admin/get-sellers',authMiddleware,ChatController.get_sellers)
 router.post('/chat/admin/send-message-seller-admin',ChatController.seller_admin_message_insert)
-router.get('/chat/get-admin-messages/:receiverId',ChatController.get_admin_message)
-router.get('/chat/get-seller-messages/',authMiddleware,ChatController.get_seller_message)
+router.get('/chat/get-admin-messages/:receiverId',ChatController.get_admin_messages)
+router.get('/chat/get-seller-messages/',authMiddleware,ChatController.get_seller_messages)
 
 module.exports = router 

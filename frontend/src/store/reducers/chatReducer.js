@@ -14,20 +14,24 @@ export const add_friend = createAsyncThunk(
     }
 )
 // End Method 
+
 export const send_message = createAsyncThunk(
     'chat/send_message',
     async(info, { rejectWithValue,fulfillWithValue }) => {
         try {
             const {data} = await api.post('/chat/customer/send-message-to-seller',info)
-            
-            return fulfillWithValue(data)
+            //  console.log(data)
+             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
         }
     }
 )
 // End Method 
+
  
+
+
 export const chatReducer = createSlice({
     name: 'chat',
     initialState:{
@@ -38,16 +42,16 @@ export const chatReducer = createSlice({
         successMessage: '', 
     },
     reducers : {
+
         messageClear : (state,_) => {
             state.errorMessage = ""
             state.successMessage = ""
-        }
-        ,
+        },
         updateMessage: (state, {payload}) => {
-            state.fb_messages = [...state.fb_messages,payload]
-
-    }
-},
+            state.fb_messages = [...state.fb_messages, payload]
+        }
+  
+    },
     extraReducers: (builder) => {
         builder 
         .addCase(add_friend.fulfilled, (state, { payload }) => { 
@@ -68,6 +72,8 @@ export const chatReducer = createSlice({
             state.fb_messages = [...state.fb_messages, payload.message];
             state.successMessage = 'Message Send Success';
         })
+
+       
     }
 })
 export const {messageClear,updateMessage} = chatReducer.actions
