@@ -121,66 +121,89 @@ class ChatController{
     // End Method 
 
     customer_message_add = async (req, res) => {
-        const {userId,text,sellerId,name } = req.body
+        const { userId, text, sellerId, name } = req.body
 
         try {
+            // Create the message
             const message = await sellerCustomerMessage.create({
                 senderId: userId,
                 senderName: name,
                 receiverId: sellerId,
-                message : text 
+                message: text
             })
 
-            const data = await sellerCustomerModel.findOne({ myId : userId })
-            let myFriends = data.myFriends
-            let index = myFriends.findIndex(f => f.fdId === sellerId)
-            while (index > 0) {
-                let temp = myFriends[index]
-                myFriends[index] = myFriends[index - 1]
-                myFriends[index - 1] = temp
-                index--
-            }
-            await sellerCustomerModel.updateOne(
-                {
-                    myId: userId
-                },
-                {
-                    myFriends
+            // Check if a relationship already exists
+            const existingRelationship = await sellerCustomerModel.findOne({
+                myId: {
+                    $in: [userId, sellerId]
+                }
+            })
+
+            if (!existingRelationship) {
+                // If no relationship exists, create a new one
+                const seller = await sellerModel.findById(sellerId)
+                const user = await customerModel.findById(userId)
+
+                await sellerCustomerModel.create({
+                    myId: userId,
+                    myFriends: [{
+                        fdId: sellerId,
+                        name: seller.shopInfo?.shopName,
+                        image: seller.image
+                    }]
+                })
+            } else {
+                // Update the existing relationship
+                const data = await sellerCustomerModel.findOne({ myId: existingRelationship.myId })
+                let myFriends = data.myFriends
+
+                // Check if the friend already exists
+                const friendIndex = myFriends.findIndex(f => 
+                    f.fdId === (existingRelationship.myId === userId ? sellerId : userId)
+                )
+
+                if (friendIndex === -1) {
+                    // If friend doesn't exist, add them
+                    const newFriend = existingRelationship.myId === userId 
+                        ? {
+                            fdId: sellerId,
+                            name: (await sellerModel.findById(sellerId)).shopInfo?.shopName,
+                            image: (await sellerModel.findById(sellerId)).image
+                        }
+                        : {
+                            fdId: userId,
+                            name: (await customerModel.findById(userId)).name,
+                            image: ""
+                        }
+
+                    myFriends.unshift(newFriend)
+                } else {
+                    // Move existing friend to top of list
+                    while (friendIndex > 0) {
+                        let temp = myFriends[friendIndex]
+                        myFriends[friendIndex] = myFriends[friendIndex - 1]
+                        myFriends[friendIndex - 1] = temp
+                        friendIndex--
+                    }
                 }
 
-            )
-
-
-
-            const data1 = await sellerCustomerModel.findOne({ myId : sellerId })
-            let myFriends1 = data1.myFriends
-            let index1 = myFriends1.findIndex(f => f.fdId === userId)
-            while (index1 > 0) {
-                let temp1 = myFriends1[index1]
-                myFriends1[index1] = myFriends[index1 - 1]
-                myFriends1[index1 - 1] = temp1
-                index1--
+                // Update the relationship
+                await sellerCustomerModel.updateOne(
+                    { myId: existingRelationship.myId },
+                    { myFriends }
+                )
             }
-            await sellerCustomerModel.updateOne(
-                {
-                    myId: sellerId
-                },
-                {
-                    myFriends1
-                } 
-            )
 
-            responseReturn(res, 201,{message})
-
+            responseReturn(res, 201, { message })
         } catch (error) {
             console.log(error)
+            responseReturn(res, 500, { error: 'Internal server error' })
         }
     }
   // End Method 
 
   get_customers = async (req, res) => {
         const { sellerId } = req.params
-        console.log(sellerId)
         try {
             const data = await sellerCustomerModel.findOne({ myId : sellerId })
             responseReturn(res, 200, {
