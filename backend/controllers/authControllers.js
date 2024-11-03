@@ -116,7 +116,24 @@ class authControllers{
     //end method
 
 
-
+    getUser = async (req, res) => {
+        const { id, role } = req;
+        try {
+            let user;
+            if (role === 'admin') {
+                user = await adminModel.findById(id);
+            } else {
+                user = await sellerModel.findById(id);
+            }
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            responseReturn(res, 200, { userInfo: user });
+        } catch (error) {
+            console.log("get-user")
+            responseReturn(res, 500, { message: 'Internal Server Error' });
+        }
+    };
 
     profile_image_upload = async(req, res) => {
 
