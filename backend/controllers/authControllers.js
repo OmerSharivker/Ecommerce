@@ -18,9 +18,12 @@ class authControllers{
                 id : admin.id,
                 role : admin.role
             })
-            res.cookie('accessToken',token,{
-                expires : new Date(Date.now() + 7*24*60*60*1000 )
-            })
+            res.cookie('accessToken', token, {
+                httpOnly: true,      
+                secure: true,         
+                sameSite: 'None',     
+                expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiration
+            });
             responseReturn(res,200,{token,message: "Login Success"})
         } else {
             responseReturn(res,404,{error: "Password Wrong"})
@@ -46,9 +49,12 @@ class authControllers{
                         id : seller.id,
                         role : seller.role
                     })
-                    res.cookie('accessToken',token,{
-                        expires : new Date(Date.now() + 7*24*60*60*1000 )
-                    }) 
+                    res.cookie('accessToken', token, {
+                        httpOnly: true,      
+                        secure: true,         
+                        sameSite: 'None',     
+                        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiration
+                    });
                     responseReturn(res,200,{token,message: "Login Success"})
                 } else {
                     responseReturn(res,404,{error: "Password Wrong"})
@@ -88,9 +94,12 @@ class authControllers{
                 id :seller.id,
                 role: seller.role
                })
-               res.cookie('accessToken',token,{
-                expires : new Date(Date.now() + 7*24*60*60*1000 )
-            })
+               res.cookie('accessToken', token, {
+                httpOnly: true,      
+                secure: true,         
+                sameSite: 'None',     
+                expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiration
+            });
                responseReturn(res,201,{token,message: 'Register Success'}) 
             }
         } catch (error) {
@@ -198,7 +207,9 @@ class authControllers{
         try {
             res.cookie('accessToken',null,{
                 expires : new Date(Date.now()),
-                httpOnly: true
+                httpOnly: true,      
+                secure: true,         
+                sameSite: 'None',  
             })
             responseReturn(res, 200,{ message : 'logout Success' })
         } catch (error) {

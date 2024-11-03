@@ -7,4 +7,4 @@ export const overRideStyle={
     justifyContent: 'center',
     alignItems: 'center'
    }
-export const socket=io('http://localhost:4000')
+export const socket=io('https://ecommerce-ils0.onrender.com')

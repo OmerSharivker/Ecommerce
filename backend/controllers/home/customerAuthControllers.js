@@ -27,9 +27,12 @@ class customerAuthControllers {
             email: createCustomer.email,
             method: createCustomer.method,
          })
-         res.cookie('customerToken',token,{
-            expires : new Date(Date.now() + 7*24*60*60*1000 )
-        }) 
+         res.cookie('customerToken', token, {
+            httpOnly: true,      
+            secure: true,         
+            sameSite: 'None',     
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiration
+        });
            responseReturn(res,200,{token,message: 'User Register Success'})   
         }
     } catch (error) {
@@ -57,9 +60,12 @@ class customerAuthControllers {
                     email: customer.email,
                     method: customer.method,
                  })
-                 res.cookie('customerToken',token,{
-                    expires : new Date(Date.now() + 7*24*60*60*1000 )
-                }) 
+                 res.cookie('customerToken', token, {
+                    httpOnly: true,      
+                    secure: true,         
+                    sameSite: 'None',     
+                    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiration
+                });
                 responseReturn(res,201,{message: 'User Login Success',token})  
             } else {
                 responseReturn(res,404,{error: 'Wrong Password'})   
@@ -81,6 +87,9 @@ class customerAuthControllers {
       try {
           
           res.cookie('customerToken',"",{
+            httpOnly: true,      
+            secure: true,         
+            sameSite: 'None',     
             expires : new Date(Date.now() )
           })
   

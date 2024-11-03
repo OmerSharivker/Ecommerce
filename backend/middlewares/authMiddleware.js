@@ -3,7 +3,7 @@
  module.exports.authMiddleware = async(req,res,next)=>{
     const{accessToken}=req.cookies;
     if(!accessToken){
-    return res.status(409).json({error : 'Please Login First'})
+    return res.status(401).json({error : 'Please Login First'})
     }
     else{
     try {
@@ -12,7 +12,10 @@
         req.id=deCodeToken.id;
         next();
     } catch (error) {
-        return res.status(409).json({error : 'Please Login'})
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ error: 'Session Expired. Please Login Again.' });
+        }
+        return res.status(401).json({ error: 'Invalid Token. Please Login.' });
     }
     }
 
