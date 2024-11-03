@@ -1,4 +1,4 @@
-const ChatController = require('../controllers/chat/ChatController')
+const ChatController =require('../controllers/chat/chatController')
 const { authMiddleware } = require('../middlewares/authMiddleware')
 const router = require('express').Router()
 
