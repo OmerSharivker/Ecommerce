@@ -21,7 +21,9 @@ const SellerChatCustomer = () => {
     const { customerId } =  useParams()
 
     const dispatch = useDispatch()
-
+    useEffect(() => {
+        socket.emit('add_seller',userInfo.id, userInfo)
+    },[])
     useEffect(() => {
         dispatch(get_customers(userInfo._id))
     },[])
