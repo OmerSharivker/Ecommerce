@@ -17,8 +17,8 @@ const SellerChatCustomer = () => {
     const {userInfo } = useSelector(state => state.auth)
     const {customers,messages,currentCustomer,successMessage } = useSelector(state => state.chat)
     const [text,setText] = useState('')
+    const [activeUsers,setActiveUsers] = useState([])
     const [receiverMessage,setReceiverMessage] = useState('')
-
     const { customerId } =  useParams()
 
     const dispatch = useDispatch()
@@ -54,6 +54,9 @@ const SellerChatCustomer = () => {
     useEffect(() => {
         socket.on('customer_message', msg => {
             setReceiverMessage(msg)
+        })
+        socket.on('activeUsers', (users) => {
+            setActiveUsers(users)
         })
          
     },[])

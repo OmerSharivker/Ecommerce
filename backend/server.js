@@ -66,7 +66,7 @@ io.on('connection', (soc) => {
     soc.on('add_user',(customerId,userInfo)=>{
         console.log(customerId,userInfo)
          addUser(customerId,soc.id,userInfo)
-         io.emit('activeSeller', allSeller) 
+         io.emit('activeUsers', allCustomer) 
     })
     soc.on('add_seller',(sellerId, userInfo) => {
        addSeller(sellerId,soc.id,userInfo)
