@@ -73,6 +73,7 @@ io.on('connection', (soc) => {
         console.log("add seller")
        addSeller(sellerId,soc.id,userInfo)
        io.emit('activeSeller', allSeller) 
+       console.log(allSeller)
     })
     soc.on('send_seller_message',(msg) => {
         const customer = findCustomer(msg.receiverId)
@@ -82,9 +83,9 @@ io.on('connection', (soc) => {
     })  
     soc.on('send_customer_message',(msg) => {
         const seller = findSeller(msg.receiverId)
-        console.log(seller,msg.receiverId)
         if (seller !== undefined) {
             soc.to(seller.socketId).emit('customer_message', msg)
+            console.log(seller.socketId)
         }
     })  
 
