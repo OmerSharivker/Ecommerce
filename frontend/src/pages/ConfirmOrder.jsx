@@ -50,7 +50,7 @@ const ConfirmOrder = () => {
         console.log(orderId)
         if (orderId) {
             try {
-                await axios.get(`http://localhost:4000/api/order/confirm/${orderId}`)
+                await axios.get(`https://ecommerce-ils0.onrender.com/api/order/confirm/${orderId}`)
                 localStorage.removeItem('orderId')
                 setLoader(false)
             } catch (error) {

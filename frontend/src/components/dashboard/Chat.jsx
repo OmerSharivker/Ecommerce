@@ -58,7 +58,7 @@ const Chat = () => {
             setActiveSeller(sellers)
         })
        
-    },[activeSeller,receiverMessage])
+    },[activeSeller])
 
     useEffect(() => {
         if (successMessage) {
