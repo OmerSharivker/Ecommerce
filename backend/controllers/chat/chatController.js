@@ -8,7 +8,7 @@ const { responseReturn } = require('../../utiles/response')
 
 class ChatController{
 
-    const add_customer_friend = async (req, res) => {
+    add_customer_friend = async (req, res) => {
         const { sellerId, userId } = req.body
         console.log(sellerId, userId)
         try {
