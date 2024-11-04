@@ -4,8 +4,11 @@ import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import { get_customer_message, get_customers,messageClear,send_message,updateMessage} from '../../store/Reducers/chatReducer';
 import { Link, useParams } from 'react-router-dom';
-import { socket } from '../../utils/utils';
+
 import toast from 'react-hot-toast';
+import io from 'socket.io-client'
+
+const socket = io( 'https://ecommerce-ils0.onrender.com')
 const SellerChatCustomer = () => {
     const scrollRef = useRef()
 

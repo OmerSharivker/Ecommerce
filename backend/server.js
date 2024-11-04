@@ -64,6 +64,7 @@ io.on('connection', (soc) => {
     console.log('socket server running..')
 
     soc.on('add_user',(customerId,userInfo)=>{
+        console.log(customerId,userInfo)
          addUser(customerId,soc.id,userInfo)
          io.emit('activeSeller', allSeller) 
     })
