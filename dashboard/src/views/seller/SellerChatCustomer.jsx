@@ -11,7 +11,6 @@ import io from 'socket.io-client'
 const socket = io( 'https://ecommerce-ils0.onrender.com')
 const SellerChatCustomer = () => {
     const scrollRef = useRef()
-
     const [show, setShow] = useState(false) 
     const sellerId = 65
     const {userInfo } = useSelector(state => state.auth)
@@ -53,14 +52,15 @@ const SellerChatCustomer = () => {
 
     useEffect(() => {
         socket.on('customer_message', msg => {
+            console.log("Received customer message:", msg);
             setReceiverMessage(msg)
         })
         socket.on('activeUsers', (users) => {
             setActiveUsers(users)
         })
-        console.log(activeUsers)
+    
          
-    },[activeUsers,receiverMessage])
+    },[activeUsers])
 
     useEffect(() => {
         if (receiverMessage) {
@@ -78,7 +78,22 @@ const SellerChatCustomer = () => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth'})
     },[messages])
 
-
+    // useEffect(() => {
+    //     socket.off('customer_message');
+    //     socket.on('customer_message', msg => {
+    //         setReceiverMessage(msg);
+    //     });
+    
+    //     socket.off('activeUsers');
+    //     socket.on('activeUsers', (users) => {
+    //         setActiveUsers(users);
+    //     });
+        
+    //     return () => {
+    //         socket.off('customer_message');
+    //         socket.off('activeUsers');
+    //     };
+    // }, []);
     return (
     <div className='px-2 lg:px-7 py-5'>
         <div className='w-full bg-[#6a5fdf] px-4 py-4 rounded-md h-[calc(100vh-140px)]'>

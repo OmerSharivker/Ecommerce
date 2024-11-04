@@ -120,10 +120,12 @@ export const chatReducer = createSlice({
             state.successMessage = ""
         }
         ,
-        updateMessage: (state, {payload}) => {
+    updateMessage: (state, {payload}) => {
             state.messages = [...state.messages,payload]
+            console.log("New message added:", payload);
+            console.log("Updated messages state:", state.messages);
 
-    },
+ },
     updateSellers: (state, {payload}) => {
         state.activeSeller =payload
 

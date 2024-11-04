@@ -7,6 +7,7 @@ const { dbConnect } = require('./utiles/db');
 const socket= require('socket.io');
 const http =require('http');
 const { userInfo } = require('os');
+const sellerCustomerModel = require('./models/chat/sellerCustomerModel');
 const server =http.createServer(app)
 
 
@@ -79,8 +80,8 @@ io.on('connection', (soc) => {
         }
     })  
     soc.on('send_customer_message',(msg) => {
-        console.log(msg.receiverId)
         const seller = findSeller(msg.receiverId)
+        console.log(seller,msg.receiverId)
         if (seller !== undefined) {
             soc.to(seller.socketId).emit('customer_message', msg)
         }
