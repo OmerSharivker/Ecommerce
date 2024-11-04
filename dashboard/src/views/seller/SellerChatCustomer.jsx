@@ -23,6 +23,7 @@ const SellerChatCustomer = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         socket.emit('add_seller',userInfo.id, userInfo)
+    
     },[])
     useEffect(() => {
         dispatch(get_customers(userInfo._id))
@@ -49,11 +50,12 @@ const SellerChatCustomer = () => {
         if (successMessage) {
             socket.emit('send_seller_message',messages[messages.length - 1])
             dispatch(messageClear())
+            console.log("seller send")
         }
     },[successMessage])
 
     useEffect(() => {
-        socket.on('customer_message', msg => {
+        socket.on('customer_messages', (msg) => {
             console.log("Received customer message:", msg);
             setReceiverMessage(msg)
         })

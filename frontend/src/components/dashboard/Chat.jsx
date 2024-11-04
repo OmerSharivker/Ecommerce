@@ -28,6 +28,7 @@ const Chat = () => {
     
     useEffect(() => {
         socket.emit('add_user',userInfo.id, userInfo)
+   
     },[])
 
     useEffect(() => {
