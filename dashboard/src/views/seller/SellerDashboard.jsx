@@ -155,7 +155,7 @@ const SellerDashboard = () => {
                     <h2 className='font-semibold text-lg text-[#d0d2d6] pb-3'>
                                          Recent Customer Message 
                     </h2>
-                    <Link to={'http://localhost:3001/seller/dashboard/chat-customer'} className='font-semibold text-sm text-[#d0d2d6]'> View All</Link>
+                    <Link to={'https://shariv-dashboard.netlify.app/seller/dashboard/chat-customer'} className='font-semibold text-sm text-[#d0d2d6]'> View All</Link>
                 </div>
 
                 <div className='flex flex-col gap-2 pt-6 text-[#d0d2d6]'>
@@ -193,7 +193,7 @@ const SellerDashboard = () => {
         <div className='w-full p-4 bg-[#6a5fdf] rounded-md mt-6'>
             <div className='flex justify-between items-center'>
                 <h2 className='font-semibold text-lg text-[#d0d2d6] pb-3 '>Recent Orders</h2>
-                <Link to={'http://localhost:3001/seller/dashboard/orders'} className='font-semibold text-sm text-[#d0d2d6]'>View All</Link>
+                <Link to={'https://shariv-dashboard.netlify.app/seller/dashboard/orders'} className='font-semibold text-sm text-[#d0d2d6]'>View All</Link>
                </div>
 
     <div className='relative overflow-x-auto'>
@@ -218,7 +218,7 @@ const SellerDashboard = () => {
                 <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>{o.delivery_status}</td>
                
                 <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
-                    <Link to={`http://localhost:3001/seller/dashboard/order/details/${o.orderId}`} className="text-green-500 hover:underline">
+                    <Link to={`https://shariv-dashboard.netlify.app/seller/dashboard/order/details/${o.orderId}`} className="text-green-500 hover:underline">
                         View
                     </Link>
                     </td>

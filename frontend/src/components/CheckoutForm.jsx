@@ -22,7 +22,7 @@ const CheckoutForm = ({orderId}) => {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: 'http://localhost:3000/order/confirm'
+                return_url: 'https://shariv-shop.netlify.app/order/confirm'
             } 
         })
         if (error.type === 'card_error' || error.type === 'validation_error') {

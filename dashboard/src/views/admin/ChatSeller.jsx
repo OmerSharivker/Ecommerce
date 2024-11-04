@@ -146,7 +146,7 @@ const ChatSeller = () => {
                     <span>{m.message} </span>
                     </div> 
                     <div>
-                        <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3001/images/admin.jpg" alt="" />
+                        <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="https://shariv-dashboard.netlify.app/images/admin.jpg" alt="" />
                     </div>
 
                 </div> 

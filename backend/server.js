@@ -11,7 +11,7 @@ const server =http.createServer(app)
 
 
 app.use(cors({
-    origin : ['http://localhost:3000','http://localhost:3001'],
+    origin : ['https://shariv-shop.netlify.app/','https://shariv-dashboard.netlify.app/login'],
     credentials: true
 }))
 
