@@ -59,7 +59,7 @@ const SellerChatCustomer = () => {
             setActiveUsers(users)
         })
          
-    },[])
+    },[activeUsers,receiverMessage])
 
     useEffect(() => {
         if (receiverMessage) {

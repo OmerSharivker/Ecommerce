@@ -8,113 +8,129 @@ const { responseReturn } = require('../../utiles/response')
 
 class ChatController{
 
-    add_customer_friend = async (req, res) => {
-        const { sellerId, userId} = req.body
-        console.log(sellerId,userId)
+    const add_customer_friend = async (req, res) => {
+        const { sellerId, userId } = req.body
+        console.log(sellerId, userId)
         try {
-           if (sellerId !== '') {
-               const seller = await sellerModel.findById(sellerId)
-               const user = await customerModel.findById(userId)
-               const checkSeller = await sellerCustomerModel.findOne({
-                   $and : [
-                       {
-                           myId: {
-                               $eq: userId
-                           }
-                       },{
-                           myFriends : {
-                               $elemMatch : {
-                                   fdId : sellerId
-                               }
-                           } 
-                       }
-                   ]
-               })
-              if (!checkSeller) {
-                 await sellerCustomerModel.updateOne({
-                     myId: userId
-                 }, {
-                   $push: {
-                       myFriends: {
-                           fdId : sellerId,
-                           name: seller.shopInfo?.shopName,
-                           image: seller.image
-                       }
-                   }
-                 })
-              }
-              const checkCustomer = await sellerCustomerModel.findOne({
-               $and : [
-                   {
-                       myId: {
-                           $eq: sellerId
-                       }
-                   },{
-                       myFriends : {
-                           $elemMatch : {
-                               fdId : userId
-                           }
-                       } 
-                   }
-               ]
-           })
-          if (!checkCustomer) {
-             await sellerCustomerModel.updateOne({
-                 myId: sellerId
-             }, {
-               $push: {
-                   myFriends: {
-                       fdId : userId,
-                       name: user.name,
-                       image: ""
-                   }
-               }
-             })
-          }
-          const messages = await sellerCustomerMessage.find({
-           $or: [
-               {
-                   $and: [{
-                       receiverId: {$eq: sellerId}
-                   },{
-                       senderId: {
-                           $eq: userId
-                       }
-                   }]
-               },
-               {
-                   $and: [{
-                       receiverId: {$eq: userId}
-                   },{
-                       senderId: {
-                           $eq: sellerId
-                       }
-                   }]
-               }
-           ]
-      })
-      const MyFriends = await sellerCustomerModel.findOne({
-          myId: userId
-      })
-      const currentFd = MyFriends.myFriends.find(s => s.fdId === sellerId)
-      responseReturn(res,200, {
-       MyFriends: MyFriends.myFriends,
-       currentFd,
-       messages
-      })
-   } else {
-       const MyFriends = await sellerCustomerModel.findOne({
-           myId: userId
-       })
-       responseReturn(res,200, {
-           MyFriends: MyFriends.myFriends 
-          })
-       }       
+            if (sellerId !== '') {
+                const seller = await sellerModel.findById(sellerId)
+                const user = await customerModel.findById(userId)
+    
+                // Create or update customer's record
+                const customerRecord = await sellerCustomerModel.findOne({ myId: userId })
+                if (!customerRecord) {
+                    // Create new customer record if it doesn't exist
+                    await sellerCustomerModel.create({
+                        myId: userId,
+                        myFriends: [{
+                            fdId: sellerId,
+                            name: seller.shopInfo?.shopName,
+                            image: seller.image
+                        }]
+                    })
+                } else {
+                    // Update existing customer record if seller not already added
+                    const checkSeller = await sellerCustomerModel.findOne({
+                        $and: [
+                            { myId: { $eq: userId } },
+                            { myFriends: { $elemMatch: { fdId: sellerId } } }
+                        ]
+                    })
+                    
+                    if (!checkSeller) {
+                        await sellerCustomerModel.updateOne(
+                            { myId: userId },
+                            {
+                                $push: {
+                                    myFriends: {
+                                        fdId: sellerId,
+                                        name: seller.shopInfo?.shopName,
+                                        image: seller.image
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+    
+                // Create or update seller's record
+                const sellerRecord = await sellerCustomerModel.findOne({ myId: sellerId })
+                if (!sellerRecord) {
+                    // Create new seller record if it doesn't exist
+                    await sellerCustomerModel.create({
+                        myId: sellerId,
+                        myFriends: [{
+                            fdId: userId,
+                            name: user.name,
+                            image: user.image || ""
+                        }]
+                    })
+                } else {
+                    // Update existing seller record if customer not already added
+                    const checkCustomer = await sellerCustomerModel.findOne({
+                        $and: [
+                            { myId: { $eq: sellerId } },
+                            { myFriends: { $elemMatch: { fdId: userId } } }
+                        ]
+                    })
+    
+                    if (!checkCustomer) {
+                        await sellerCustomerModel.updateOne(
+                            { myId: sellerId },
+                            {
+                                $push: {
+                                    myFriends: {
+                                        fdId: userId,
+                                        name: user.name,
+                                        image: user.image || ""
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+    
+                // Get messages between seller and customer
+                const messages = await sellerCustomerMessage.find({
+                    $or: [
+                        {
+                            $and: [
+                                { receiverId: { $eq: sellerId } },
+                                { senderId: { $eq: userId } }
+                            ]
+                        },
+                        {
+                            $and: [
+                                { receiverId: { $eq: userId } },
+                                { senderId: { $eq: sellerId } }
+                            ]
+                        }
+                    ]
+                })
+    
+                // Get updated friends lists
+                const customerFriends = await sellerCustomerModel.findOne({ myId: userId })
+                const currentFd = customerFriends.myFriends.find(s => s.fdId === sellerId)
+    
+                responseReturn(res, 200, {
+                    MyFriends: customerFriends.myFriends,
+                    currentFd,
+                    messages
+                })
+            } else {
+                const MyFriends = await sellerCustomerModel.findOne({
+                    myId: userId
+                })
+                responseReturn(res, 200, {
+                    MyFriends: MyFriends.myFriends
+                })
+            }
         } catch (error) {
-           console.log(error)
+            console.log(error)
+            responseReturn(res, 500, { error: 'Internal server error' })
         }
-   }
-   // End Method 
+    }
+     //end method
 
    customer_message_add = async (req, res) => {
        const {userId,text,sellerId,name } = req.body
