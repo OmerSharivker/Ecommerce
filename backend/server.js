@@ -78,6 +78,7 @@ io.on('connection', (soc) => {
         }
     })  
     soc.on('send_customer_message',(msg) => {
+        console.log(msg.receiverId)
         const seller = findSeller(msg.receiverId)
         if (seller !== undefined) {
             soc.to(seller.socketId).emit('customer_message', msg)
