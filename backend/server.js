@@ -73,8 +73,9 @@ io.on('connection', (soc) => {
           
     })
     soc.on('add_seller',(sellerId, userInfo) => {
-    console.log( sellers[sellerId].socketId)
+
        addSeller(sellerId,soc.id,userInfo)
+       console.log( sellers[sellerId].socketId)
      
     })
     soc.on('send_seller_message',(msg) => {
