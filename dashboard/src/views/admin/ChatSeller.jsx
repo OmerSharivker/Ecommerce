@@ -48,7 +48,7 @@ const ChatSeller = () => {
     useEffect(() => {
         socket.on('received_seller_message', msg => {
             setReceiverMessage(msg)
-            console.log(receiverMessage)
+           
         })
     },[])
 
