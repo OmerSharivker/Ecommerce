@@ -28,28 +28,33 @@ var allCustomer = []
 var allSeller = []
 let admin = {}
 
-const addUser = (customerId,socketId,userInfo) => {
-    const checkUser = allCustomer.some(u => u.customerId === customerId)
-    if (!checkUser) {
-        allCustomer.push({
-            customerId,
-            socketId,
-            userInfo
-        })
+const addUser = (customerId, socketId, userInfo) => {
+    const userIndex = allCustomer.findIndex(u => u.customerId === customerId);
+    if (userIndex !== -1) {
+        allCustomer[userIndex].socketId = socketId; // Update socket ID if user exists
+    } else {
+        allCustomer.push({ customerId, socketId, userInfo });
     }
-} 
+    io.emit('activeUsers', allCustomer); // Broadcast updated list
+}
 
-const addSeller = (sellerId,socketId,userInfo) => {
-    const checkSeller = allSeller.some(u => u.sellerId === sellerId)
-    if (!checkSeller) {
-        allSeller.push({
-            sellerId,
-            socketId,
-            userInfo
-        })
+const addSeller = (sellerId, socketId, userInfo) => {
+    const sellerIndex = allSeller.findIndex(u => u.sellerId === sellerId);
+    if (sellerIndex !== -1) {
+        allSeller[sellerIndex].socketId = socketId; // Update socket ID if seller exists
+    } else {
+        allSeller.push({ sellerId, socketId, userInfo });
     }
-} 
+    io.emit('activeSeller', allSeller); // Broadcast updated list
+}
 
+// Emit updated list after removing a user
+const remove = (socketId) => {
+    allCustomer = allCustomer.filter(c => c.socketId !== socketId);
+    allSeller = allSeller.filter(s => s.socketId !== socketId);
+    io.emit('activeUsers', allCustomer);
+    io.emit('activeSeller', allSeller);
+}
 const findCustomer = (customerId) => {
     return allCustomer.find(c => c.customerId === customerId)
 }
@@ -57,10 +62,7 @@ const findSeller = (sellerId) => {
     return allSeller.find(c => c.sellerId === sellerId)
 }
 
-const remove = (socketId) => {
-    allCustomer = allCustomer.filter(c => c.socketId !== socketId)
-    allSeller = allSeller.filter(c => c.socketId !== socketId)
-}
+
 
 io.on('connection', (soc) => {
     console.log('socket server running..')
@@ -68,13 +70,12 @@ io.on('connection', (soc) => {
     soc.on('add_user',(customerId,userInfo)=>{
         
          addUser(customerId,soc.id,userInfo)
-         io.emit('activeUsers', allCustomer) 
+          
     })
     soc.on('add_seller',(sellerId, userInfo) => {
-
+    console.log( sellers[sellerId].socketId)
        addSeller(sellerId,soc.id,userInfo)
-       io.emit('activeSeller', allSeller) 
-  
+     
     })
     soc.on('send_seller_message',(msg) => {
         const customer = findCustomer(msg.receiverId)
@@ -118,7 +119,7 @@ io.on('connection', (soc) => {
     soc.on('disconnect',() => {
         console.log('user disconnect')
         remove(soc.id)
-        io.emit('activeSeller', allSeller) 
+     
     })
 
 

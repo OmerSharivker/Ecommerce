@@ -11,20 +11,18 @@ import io from 'socket.io-client'
 const socket = io( 'https://ecommerce-ils0.onrender.com')
 const SellerChatCustomer = () => {
     const scrollRef = useRef()
+
     const [show, setShow] = useState(false) 
     const sellerId = 65
     const {userInfo } = useSelector(state => state.auth)
     const {customers,messages,currentCustomer,successMessage } = useSelector(state => state.chat)
     const [text,setText] = useState('')
-    const [activeUsers,setActiveUsers] = useState([])
-    const [receiverMessage,setReceiverMessage] = useState('')
+    const [receverMessage,setReceverMessage] = useState('')
+
     const { customerId } =  useParams()
 
     const dispatch = useDispatch()
-    useEffect(() => {
-        socket.emit('add_seller',userInfo.id, userInfo)
-    
-    },[])
+
     useEffect(() => {
         dispatch(get_customers(userInfo._id))
     },[])
@@ -50,54 +48,34 @@ const SellerChatCustomer = () => {
         if (successMessage) {
             socket.emit('send_seller_message',messages[messages.length - 1])
             dispatch(messageClear())
-          
         }
     },[successMessage])
 
     useEffect(() => {
         socket.on('customer_messages', msg => {
-            console.log("Received customer message:", msg);
-            setReceiverMessage(msg)
+            setReceverMessage(msg)
+            console.log(msg)
         })
-        socket.on('activeUsers', (users) => {
-            setActiveUsers(users)
-        })
-    
          
     },[])
 
     useEffect(() => {
-        if (receiverMessage) {
-            if (customerId === receiverMessage.senderId && userInfo._id === receiverMessage.receiverId) {
-                dispatch(updateMessage(receiverMessage))
+        if (receverMessage) {
+            if (customerId === receverMessage.senderId && userInfo._id === receverMessage.receiverId) {
+                dispatch(updateMessage(receverMessage))
             } else {
-                toast.success(receiverMessage.senderName + " " + "Send A message")
+                toast.success(receverMessage.senderName + " " + "Send A message")
                 dispatch(messageClear())
             }
         }
 
-    },[receiverMessage])
+    },[receverMessage])
 
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth'})
     },[messages])
 
-    // useEffect(() => {
-    //     socket.off('customer_message');
-    //     socket.on('customer_message', msg => {
-    //         setReceiverMessage(msg);
-    //     });
-    
-    //     socket.off('activeUsers');
-    //     socket.on('activeUsers', (users) => {
-    //         setActiveUsers(users);
-    //     });
-        
-    //     return () => {
-    //         socket.off('customer_message');
-    //         socket.off('activeUsers');
-    //     };
-    // }, []);
+
     return (
     <div className='px-2 lg:px-7 py-5'>
         <div className='w-full bg-[#6a5fdf] px-4 py-4 rounded-md h-[calc(100vh-140px)]'>
@@ -114,12 +92,8 @@ const SellerChatCustomer = () => {
         {
             customers.map((c,i) => <Link key={i} to={`/seller/dashboard/chat-customer/${c.fdId}`} className={`h-[60px] flex justify-start gap-2 items-center text-white px-2 py-2 rounded-md cursor-pointer bg-[#8288ed] `}>
             <div className='relative'>
-             <img className='w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full' src="https://shariv-dashboard.netlify.app/images/admin.jpg" alt="" />
-                 
-             {
-                   activeUsers.some(activeUser => activeUser.customerId === c.fdId) && <div className='w-[10px] h-[10px] rounded-full bg-green-500 absolute right-0 bottom-0'></div> 
-              } 
-                    
+             <img className='w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full' src="http://localhost:3001/images/admin.jpg" alt="" />
+             <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
             </div>
     
             <div className='flex justify-center items-start flex-col w-full'>
@@ -146,7 +120,7 @@ const SellerChatCustomer = () => {
             {
                 sellerId && <div className='flex justify-start items-center gap-3'>
            <div className='relative'>
-         <img className='w-[45px] h-[45px] border-green-500 border-2 max-w-[45px] p-[2px] rounded-full' src="https://shariv-dashboard.netlify.app/images/demo.jpg" alt="" />
+         <img className='w-[45px] h-[45px] border-green-500 border-2 max-w-[45px] p-[2px] rounded-full' src="http://localhost:3001/images/demo.jpg" alt="" />
          <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
         </div>
         <h2 className='text-base text-white font-semibold'>{currentCustomer.name}</h2>
@@ -169,7 +143,7 @@ const SellerChatCustomer = () => {
                     <div key={i} ref={scrollRef} className='w-full flex justify-start items-center'>
                     <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
                         <div>
-                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="https://shariv-dashboard.netlify.app/images/demo.jpg" alt="" />
+                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3001/images/demo.jpg" alt="" />
                         </div>
                         <div className='flex justify-center items-start flex-col w-full bg-blue-500 shadow-lg shadow-blue-500/50 text-white py-1 px-2 rounded-sm'>
                         <span>{m.message} </span>
@@ -186,7 +160,7 @@ const SellerChatCustomer = () => {
                         <span>{m.message} </span>
                         </div> 
                         <div>
-                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="https://shariv-dashboard.netlify.app/images/admin.jpg" alt="" />
+                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3001/images/admin.jpg" alt="" />
                         </div>
 
                     </div> 
@@ -223,6 +197,6 @@ const SellerChatCustomer = () => {
         
     </div>
     );
-};
+}
 
 export default SellerChatCustomer;
