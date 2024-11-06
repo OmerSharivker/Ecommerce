@@ -13,14 +13,15 @@ const server =http.createServer(app)
 
 
 app.use(cors({
-    origin : ['https://shariv-shop.netlify.app','https://shariv-dashboard.netlify.app','http://localhost:3000','http://localhost:3001','https://ecommerce-1-s58p.onrender.com'],
+    origin : ['https://shariv-shop.netlify.app','https://shariv-dashboard.netlify.app','http://localhost:3000','http://localhost:3001'],
     credentials: true
 }))
 
 const io = socket(server, {
     cors: {
         origin: '*',
-        credentials: true
+        credentials: true,
+        methods: ["GET", "POST"]
     }
 })
 
