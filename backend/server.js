@@ -8,6 +8,7 @@ const socket= require('socket.io');
 const http =require('http');
 const { userInfo } = require('os');
 const sellerCustomerModel = require('./models/chat/sellerCustomerModel');
+const { ConnectionStates } = require('mongoose');
 const server =http.createServer(app)
 
 
@@ -65,7 +66,7 @@ io.on('connection', (soc) => {
     console.log('socket server running..')
 
     soc.on('add_user',(customerId,userInfo)=>{
-        console.log(customerId,userInfo)
+        
          addUser(customerId,soc.id,userInfo)
          io.emit('activeUsers', allCustomer) 
     })
@@ -85,15 +86,18 @@ io.on('connection', (soc) => {
         const seller = findSeller(msg.receiverId)
         if (seller !== undefined) {
             soc.to(seller.socketId).emit('customer_messages', msg)
-           
-        }
+            console.log(seller.socketId)
+       }
+       console.log(seller)
     })  
 
     soc.on('send_message_admin_to_seller',(msg) => {
         const seller = findSeller(msg.receiverId)
         if (seller !== undefined) {
             soc.to(seller.socketId).emit('received_admin_message', msg)
+            console.log(seller.socketId)
         }
+        console.log(seller)
     })
 
     soc.on('send_message_seller_to_admin',(msg) => { 
@@ -101,8 +105,6 @@ io.on('connection', (soc) => {
             soc.to(admin.socketId).emit('received_seller_message', msg)
         }
     })
-
-
 
     soc.on('add_admin',(adminInfo) => {
         delete adminInfo.email
