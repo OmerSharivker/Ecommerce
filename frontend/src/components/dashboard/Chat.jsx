@@ -64,6 +64,7 @@ const Chat = () => {
         if (successMessage) {
             socket.emit('send_customer_message',fb_messages[fb_messages.length - 1])
             dispatch(messageClear())
+            console.log("user send ",fb_messages[fb_messages.length - 1])
         }
     },[successMessage])
 

@@ -12,7 +12,7 @@ const server =http.createServer(app)
 
 
 app.use(cors({
-    origin : ['https://shariv-shop.netlify.app','https://shariv-dashboard.netlify.app','http://localhost:3000','http://localhost:3001'],
+    origin : ['https://shariv-shop.netlify.app','https://shariv-dashboard.netlify.app','http://localhost:3000','http://localhost:3001','https://shariv-dashboard.netlify.app/admin'],
     credentials: true
 }))
 
@@ -85,7 +85,7 @@ io.on('connection', (soc) => {
         const seller = findSeller(msg.receiverId)
         if (seller !== undefined) {
             soc.to(seller.socketId).emit('customer_messages', msg)
-            console.log(seller.socketId)
+           
         }
     })  
 
