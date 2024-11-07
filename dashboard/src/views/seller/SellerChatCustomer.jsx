@@ -5,8 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { get_customer_message, get_customers,messageClear,send_message,updateMessage} from '../../store/Reducers/chatReducer';
 import { Link, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import io from 'socket.io-client'
+import io from 'socket.io-client';
+
+
 const socket = io('https://ecommerce-ils0.onrender.com')
+
 const SellerChatCustomer = () => {
     const scrollRef = useRef()
 
@@ -41,7 +44,17 @@ const SellerChatCustomer = () => {
             }))
             setText('') 
     }
- 
+ // Listen for the 'connect' event to confirm connection
+socket.on('connect', () => {
+    console.log('Connected to server');
+    console.log('Socket ID:', socket.id); // Logs the unique socket ID if needed
+  });
+  
+  // Optionally, listen for 'connect_error' to handle connection failures
+  socket.on('connect_error', (error) => {
+    console.error('Connection failed:', error);
+  });    
+
     useEffect(() => {
         if (successMessage) {
             socket.emit('send_seller_message',messages[messages.length - 1])
@@ -55,12 +68,12 @@ const SellerChatCustomer = () => {
             );
         }
        
-        socket.on('customer_messages', msg => {
+        socket.on('customer', msg => {
             setReceverMessage(msg)
             console.log(msg)
         })
          
-    },[])
+    })
 
     useEffect(() => {
         if (receverMessage) {

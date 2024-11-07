@@ -88,10 +88,10 @@ io.on('connection', (soc) => {
     soc.on('send_customer_message',(msg) => {
         const seller = findSeller(msg.receiverId)
         if (seller !== undefined) {
-            soc.to(seller.socketId).emit('customer_messages', msg)
-            console.log(seller.socketId)
+            soc.to(seller.socketId).emit('customer', msg)
+            console.log(msg)
        }
-       console.log(seller)
+    
     })  
 
     soc.on('send_message_admin_to_seller',(msg) => {
